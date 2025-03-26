@@ -9,9 +9,13 @@ namespace ExportadorDeLaudos
         ///  Required designer variable.
         /// </summary>
         private System.ComponentModel.IContainer components = null;
-        private Button buttonSelectFiles;
+        private Button buttonSelectFolder;
         private Button buttonSendToOrbis;
         private ListBox listFiles;
+        private ComboBox comboStatus;
+        private NumericUpDown year;
+        private NumericUpDown maxFiles;
+        private FolderBrowserDialog folderBrowserDialog;
         private OpenFileDialog openFileDialog;
 
         /// <summary>
@@ -35,75 +39,117 @@ namespace ExportadorDeLaudos
         /// </summary>
         private void InitializeComponent()
         {
-            buttonSelectFiles = new Button();
+            buttonSelectFolder = new Button();
             listFiles = new ListBox();
+            comboStatus = new ComboBox();
+            year = new NumericUpDown();
+            maxFiles = new NumericUpDown();
             buttonSendToOrbis = new Button();
+            folderBrowserDialog = new FolderBrowserDialog();
             openFileDialog = new OpenFileDialog();
+            ((System.ComponentModel.ISupportInitialize)year).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)maxFiles).BeginInit();
             SuspendLayout();
             // 
-            // buttonSelectFiles
+            // buttonSelectFolder
             // 
-            buttonSelectFiles.Location = new Point(15, 15);
-            buttonSelectFiles.Name = "buttonSelectFiles";
-            buttonSelectFiles.Size = new Size(150, 30);
-            buttonSelectFiles.TabIndex = 0;
-            buttonSelectFiles.Text = "Selecionar arquivos";
-            buttonSelectFiles.Click += ButtonSelectFiles_Click;
+            buttonSelectFolder.Location = new Point(10, 10);
+            buttonSelectFolder.Name = "buttonSelectFolder";
+            buttonSelectFolder.Size = new Size(269, 37);
+            buttonSelectFolder.TabIndex = 0;
+            buttonSelectFolder.Text = "Selecionar a pasta com os arquivos...";
+            buttonSelectFolder.Click += ButtonSelectFolder_Click;
             // 
             // listFiles
             // 
             listFiles.AllowDrop = true;
-            listFiles.Location = new Point(12, 50);
+            listFiles.Location = new Point(10, 53);
             listFiles.Name = "listFiles";
             listFiles.SelectionMode = SelectionMode.None;
-            listFiles.Size = new Size(560, 424);
+            listFiles.Size = new Size(1004, 324);
             listFiles.TabIndex = 1;
             listFiles.DragDrop += ListFiles_DragDrop;
             listFiles.DragEnter += ListFiles_DragEnter;
             // 
+            // comboStatus
+            // 
+            //comboStatus.Items.AddRange(new object[] { "Laudo vivo", "Laudo morto" });
+            comboStatus.Items.Add("Laudo vivo");
+            comboStatus.Items.Add("Laudo morto");
+            comboStatus.Location = new Point(10, 402);
+            comboStatus.Name = "comboStatus";
+            comboStatus.Text = "Tipo de laudo (vivo/morto): ";
+            comboStatus.Size = new Size(121, 28);
+            comboStatus.TabIndex = 2;
+            // 
+            // year
+            // 
+            year.Location = new Point(10, 432);
+            year.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            //year.Maximum = new decimal(new int[] { 1, 1, 1, 1 });
+            year.Name = "year";
+            year.Text = "Ano: ";
+            year.Size = new Size(120, 27);
+            year.TabIndex = 3;
+            year.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // maxFiles
+            // 
+            maxFiles.Location = new Point(10, 462);
+            maxFiles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            //maxFiles.Maximum = new decimal(new int[] { 1, 1, 1, 1 });
+            maxFiles.Name = "maxFiles";
+            maxFiles.Text = "Número máximo de arquivos para envio: ";
+            maxFiles.Size = new Size(120, 27);
+            maxFiles.TabIndex = 4;
+            maxFiles.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
             // buttonSendToOrbis
             // 
             buttonSendToOrbis.Enabled = false;
-            buttonSendToOrbis.Location = new Point(12, 480);
+            buttonSendToOrbis.Location = new Point(10, 502);
             buttonSendToOrbis.Name = "buttonSendToOrbis";
-            buttonSendToOrbis.Size = new Size(75, 30);
-            buttonSendToOrbis.TabIndex = 2;
-            buttonSendToOrbis.Text = "Enviar para o Orbis";
+            buttonSendToOrbis.Size = new Size(232, 28);
+            buttonSendToOrbis.TabIndex = 5;
+            buttonSendToOrbis.Text = "Enviar os arquivos para o Orbis";
             buttonSendToOrbis.Click += ButtonSendToOrbis_Click;
-            // 
-            // openFileDialog
-            // 
-            openFileDialog.Filter = "All files|*.*";
-            openFileDialog.Multiselect = true;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1083, 542);
-            Controls.Add(buttonSelectFiles);
+            Controls.Add(buttonSelectFolder);
             Controls.Add(listFiles);
+            Controls.Add(comboStatus);
+            Controls.Add(year);
+            Controls.Add(maxFiles);
             Controls.Add(buttonSendToOrbis);
             Name = "Form1";
             Text = "Exportador de Laudos";
+            ((System.ComponentModel.ISupportInitialize)year).EndInit();
+            ((System.ComponentModel.ISupportInitialize)maxFiles).EndInit();
             ResumeLayout(false);
         }
 
         #endregion
 
-        private void ButtonSelectFiles_Click(object sender, EventArgs e)
+        private void ButtonSelectFolder_Click(object sender, EventArgs e)
         {
-            // Open file dialog to select multiple files
-            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            // Open folder browser dialog to select a folder
+            if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
-                // Add selected files to the list box
+                string selectedFolder = folderBrowserDialog.SelectedPath;
+
+                // Get all files from the selected folder and display them in the list
                 listFiles.Items.Clear();  // Clear the previous list
-                foreach (var file in openFileDialog.FileNames)
+                string[] files = Directory.GetFiles(selectedFolder);
+                foreach (var file in files)
                 {
                     listFiles.Items.Add(file);  // Add file path to the list
                 }
 
-                // Enable the process button if files are selected
+                // Enable the process button if there are files in the folder
                 buttonSendToOrbis.Enabled = listFiles.Items.Count > 0;
             }
         }
@@ -142,8 +188,12 @@ namespace ExportadorDeLaudos
         private void ButtonSendToOrbis_Click(object sender, EventArgs e)
         {
             // Here you can implement the behavior for the second button
-            // For now, let's show a simple message
-            MessageBox.Show("Enviando os arquivos para o Orbis...");
+            // For now, let's show the selected inputs for demonstration
+            string status = comboStatus.SelectedItem.ToString();
+            decimal yearAsDecimalForSomeReason = year.Value;
+            decimal maxFilesAsDecimalForSomeReason = maxFiles.Value;
+
+            MessageBox.Show($"Status: {status}\nAno: {yearAsDecimalForSomeReason}\nNúmero máximo de arquivos: {maxFilesAsDecimalForSomeReason}\nProcessando a requisição...");
         }
     }
 }
