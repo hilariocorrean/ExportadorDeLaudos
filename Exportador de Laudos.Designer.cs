@@ -12,9 +12,12 @@ namespace ExportadorDeLaudos
         private Button buttonSelectFolder;
         private Button buttonSendToOrbis;
         private ListBox listFiles;
-        private ComboBox comboStatus;
+        private ComboBox comboReportType;
         private NumericUpDown year;
         private NumericUpDown maxFiles;
+        private Label labelReportType;
+        private Label labelYear;
+        private Label labelMaxFiles;
         private FolderBrowserDialog folderBrowserDialog;
         private OpenFileDialog openFileDialog;
 
@@ -41,7 +44,7 @@ namespace ExportadorDeLaudos
         {
             buttonSelectFolder = new Button();
             listFiles = new ListBox();
-            comboStatus = new ComboBox();
+            comboReportType = new ComboBox();
             year = new NumericUpDown();
             maxFiles = new NumericUpDown();
             buttonSendToOrbis = new Button();
@@ -74,28 +77,33 @@ namespace ExportadorDeLaudos
             listFiles.DragDrop += ListFiles_DragDrop;
             listFiles.DragEnter += ListFiles_DragEnter;
             // 
-            // comboStatus
+            // comboReportType
             // 
-            comboStatus.Items.AddRange(new object[] { "Laudo vivo", "Laudo morto" });
-            comboStatus.Location = new Point(186, 396);
-            comboStatus.Name = "comboStatus";
-            comboStatus.Size = new Size(121, 28);
-            comboStatus.TabIndex = 2;
-            comboStatus.Text = "Selecionar...";
+            comboReportType.Items.AddRange(new object[] { "Laudo vivo", "Laudo morto" });
+            comboReportType.Location = new Point(186, 396);
+            comboReportType.Name = "comboReportType";
+            comboReportType.Size = new Size(121, 28);
+            comboReportType.TabIndex = 2;
+            comboReportType.Text = "Selecionar...";
+            comboReportType.SelectedIndex = -1; // No default selection
+            comboReportType.SelectedIndexChanged += ComboReportType_SelectedIndexChanged; // Handle selection change
             // 
             // year
             // 
             year.Location = new Point(186, 426);
-            year.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            //year.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            year.Minimum = 0;
+            year.Maximum = 2125;
             year.Name = "year";
             year.Size = new Size(120, 27);
             year.TabIndex = 3;
-            year.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            year.Value = DateTime.Now.Year;
             // 
             // maxFiles
             // 
             maxFiles.Location = new Point(186, 456);
-            maxFiles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            maxFiles.Minimum = 1;
+            maxFiles.Maximum = 2147483647; //int max lol
             maxFiles.Name = "maxFiles";
             maxFiles.Size = new Size(120, 27);
             maxFiles.TabIndex = 4;
@@ -148,7 +156,7 @@ namespace ExportadorDeLaudos
             Controls.Add(labelReportType);
             Controls.Add(buttonSelectFolder);
             Controls.Add(listFiles);
-            Controls.Add(comboStatus);
+            Controls.Add(comboReportType);
             Controls.Add(year);
             Controls.Add(maxFiles);
             Controls.Add(buttonSendToOrbis);
@@ -177,8 +185,8 @@ namespace ExportadorDeLaudos
                     listFiles.Items.Add(file);  // Add file path to the list
                 }
 
-                // Enable the process button if there are files in the folder
-                buttonSendToOrbis.Enabled = listFiles.Items.Count > 0;
+                // Check and update the button state
+                UpdateSendToOrbisButtonState();
             }
         }
 
@@ -217,14 +225,25 @@ namespace ExportadorDeLaudos
         {
             // Here you can implement the behavior for the second button
             // For now, let's show the selected inputs for demonstration
-            string status = comboStatus.SelectedItem.ToString();
+            string status = comboReportType.SelectedItem.ToString();
             decimal yearAsDecimalForSomeReason = year.Value;
             decimal maxFilesAsDecimalForSomeReason = maxFiles.Value;
 
             MessageBox.Show($"Status: {status}\nAno: {yearAsDecimalForSomeReason}\nNúmero máximo de arquivos: {maxFilesAsDecimalForSomeReason}\nProcessando a requisição...");
         }
-        private Label labelReportType;
-        private Label labelYear;
-        private Label labelMaxFiles;
+
+        private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            // Check and update the button state whenever the ComboBox selection changes
+            UpdateSendToOrbisButtonState();
+        }
+
+        private void UpdateSendToOrbisButtonState()
+        {
+            // Enable the button only if both conditions are met:
+            // 1. The list is not empty
+            // 2. The ComboBox has a selected item
+            buttonSendToOrbis.Enabled = listFiles.Items.Count > 0 && comboReportType.SelectedIndex != -1; //mudar o segundo pra 'is not null'?
+        }
     }
 }
