@@ -47,6 +47,9 @@ namespace ExportadorDeLaudos
             buttonSendToOrbis = new Button();
             folderBrowserDialog = new FolderBrowserDialog();
             openFileDialog = new OpenFileDialog();
+            labelReportType = new Label();
+            labelYear = new Label();
+            labelMaxFiles = new Label();
             ((System.ComponentModel.ISupportInitialize)year).BeginInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).BeginInit();
             SuspendLayout();
@@ -73,33 +76,27 @@ namespace ExportadorDeLaudos
             // 
             // comboStatus
             // 
-            //comboStatus.Items.AddRange(new object[] { "Laudo vivo", "Laudo morto" });
-            comboStatus.Items.Add("Laudo vivo");
-            comboStatus.Items.Add("Laudo morto");
-            comboStatus.Location = new Point(10, 402);
+            comboStatus.Items.AddRange(new object[] { "Laudo vivo", "Laudo morto" });
+            comboStatus.Location = new Point(186, 396);
             comboStatus.Name = "comboStatus";
-            comboStatus.Text = "Tipo de laudo (vivo/morto): ";
             comboStatus.Size = new Size(121, 28);
             comboStatus.TabIndex = 2;
+            comboStatus.Text = "Selecionar...";
             // 
             // year
             // 
-            year.Location = new Point(10, 432);
+            year.Location = new Point(186, 426);
             year.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            //year.Maximum = new decimal(new int[] { 1, 1, 1, 1 });
             year.Name = "year";
-            year.Text = "Ano: ";
             year.Size = new Size(120, 27);
             year.TabIndex = 3;
             year.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // maxFiles
             // 
-            maxFiles.Location = new Point(10, 462);
+            maxFiles.Location = new Point(186, 456);
             maxFiles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            //maxFiles.Maximum = new decimal(new int[] { 1, 1, 1, 1 });
             maxFiles.Name = "maxFiles";
-            maxFiles.Text = "Número máximo de arquivos para envio: ";
             maxFiles.Size = new Size(120, 27);
             maxFiles.TabIndex = 4;
             maxFiles.Value = new decimal(new int[] { 1, 0, 0, 0 });
@@ -114,11 +111,41 @@ namespace ExportadorDeLaudos
             buttonSendToOrbis.Text = "Enviar os arquivos para o Orbis";
             buttonSendToOrbis.Click += ButtonSendToOrbis_Click;
             // 
+            // labelReportType
+            // 
+            labelReportType.AutoSize = true;
+            labelReportType.Location = new Point(78, 399);
+            labelReportType.Name = "labelReportType";
+            labelReportType.Size = new Size(102, 20);
+            labelReportType.TabIndex = 6;
+            labelReportType.Text = "Tipo de laudo";
+            // 
+            // labelYear
+            // 
+            labelYear.AutoSize = true;
+            labelYear.Location = new Point(144, 428);
+            labelYear.Name = "labelYear";
+            labelYear.Size = new Size(36, 20);
+            labelYear.TabIndex = 7;
+            labelYear.Text = "Ano";
+            // 
+            // labelMaxFiles
+            // 
+            labelMaxFiles.AutoSize = true;
+            labelMaxFiles.Location = new Point(15, 458);
+            labelMaxFiles.Name = "labelMaxFiles";
+            labelMaxFiles.Size = new Size(165, 20);
+            labelMaxFiles.TabIndex = 8;
+            labelMaxFiles.Text = "Nº máximo de arquivos";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1083, 542);
+            Controls.Add(labelMaxFiles);
+            Controls.Add(labelYear);
+            Controls.Add(labelReportType);
             Controls.Add(buttonSelectFolder);
             Controls.Add(listFiles);
             Controls.Add(comboStatus);
@@ -130,6 +157,7 @@ namespace ExportadorDeLaudos
             ((System.ComponentModel.ISupportInitialize)year).EndInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).EndInit();
             ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
@@ -195,5 +223,8 @@ namespace ExportadorDeLaudos
 
             MessageBox.Show($"Status: {status}\nAno: {yearAsDecimalForSomeReason}\nNúmero máximo de arquivos: {maxFilesAsDecimalForSomeReason}\nProcessando a requisição...");
         }
+        private Label labelReportType;
+        private Label labelYear;
+        private Label labelMaxFiles;
     }
 }
