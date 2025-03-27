@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExportadorDeLaudos.Contracts;
+using System;
 using System.Windows.Forms;
 
 namespace ExportadorDeLaudos
@@ -20,6 +21,7 @@ namespace ExportadorDeLaudos
         private Label labelMaxFiles;
         private FolderBrowserDialog folderBrowserDialog;
         private OpenFileDialog openFileDialog;
+        private IRelatorioAtualizadoRepository relatorioAtualizadoRepository;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -225,11 +227,13 @@ namespace ExportadorDeLaudos
         {
             // Here you can implement the behavior for the second button
             // For now, let's show the selected inputs for demonstration
-            string status = comboReportType.SelectedItem.ToString();
+            string reportType = comboReportType.SelectedItem.ToString();
             decimal yearAsDecimalForSomeReason = year.Value;
             decimal maxFilesAsDecimalForSomeReason = maxFiles.Value;
 
-            MessageBox.Show($"Status: {status}\nAno: {yearAsDecimalForSomeReason}\nNúmero máximo de arquivos: {maxFilesAsDecimalForSomeReason}\nProcessando a requisição...");
+
+
+            MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDecimalForSomeReason}\nNúmero máximo de arquivos: {maxFilesAsDecimalForSomeReason}\nProcessando a requisição...");
         }
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
