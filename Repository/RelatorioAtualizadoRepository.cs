@@ -63,7 +63,7 @@ namespace ExportadorDeLaudos.Repository
             }
             catch(Exception ex)
             {
-                Console.WriteLine(ex.StackTrace.ToString());
+                MessageBox.Show(ex.StackTrace!.ToString());
                 return null;
             }
         }

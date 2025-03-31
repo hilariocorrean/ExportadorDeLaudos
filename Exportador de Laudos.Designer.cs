@@ -12,7 +12,7 @@ namespace ExportadorDeLaudos
         private System.ComponentModel.IContainer components = null;
         private Button buttonSelectFolder;
         private Button buttonSendToOrbis;
-        private ListBox listFiles;
+        private ListBox listFilePaths;
         private ComboBox comboReportType;
         private NumericUpDown year;
         private NumericUpDown maxFiles;
@@ -45,7 +45,7 @@ namespace ExportadorDeLaudos
         private void InitializeComponent()
         {
             buttonSelectFolder = new Button();
-            listFiles = new ListBox();
+            listFilePaths = new ListBox();
             comboReportType = new ComboBox();
             year = new NumericUpDown();
             maxFiles = new NumericUpDown();
@@ -68,16 +68,16 @@ namespace ExportadorDeLaudos
             buttonSelectFolder.Text = "Selecionar a pasta com os arquivos...";
             buttonSelectFolder.Click += ButtonSelectFolder_Click;
             // 
-            // listFiles
+            // listFilePaths
             // 
-            listFiles.AllowDrop = true;
-            listFiles.Location = new Point(10, 53);
-            listFiles.Name = "listFiles";
-            listFiles.SelectionMode = SelectionMode.None;
-            listFiles.Size = new Size(1004, 324);
-            listFiles.TabIndex = 1;
-            listFiles.DragDrop += ListFiles_DragDrop;
-            listFiles.DragEnter += ListFiles_DragEnter;
+            listFilePaths.AllowDrop = true;
+            listFilePaths.Location = new Point(10, 53);
+            listFilePaths.Name = "listFilePaths";
+            listFilePaths.SelectionMode = SelectionMode.None;
+            listFilePaths.Size = new Size(1004, 324);
+            listFilePaths.TabIndex = 1;
+            listFilePaths.DragDrop += ListFilePaths_DragDrop;
+            listFilePaths.DragEnter += ListFilePaths_DragEnter;
             // 
             // comboReportType
             // 
@@ -156,7 +156,7 @@ namespace ExportadorDeLaudos
             Controls.Add(labelYear);
             Controls.Add(labelReportType);
             Controls.Add(buttonSelectFolder);
-            Controls.Add(listFiles);
+            Controls.Add(listFilePaths);
             Controls.Add(comboReportType);
             Controls.Add(year);
             Controls.Add(maxFiles);
@@ -179,11 +179,11 @@ namespace ExportadorDeLaudos
                 string selectedFolder = folderBrowserDialog.SelectedPath;
 
                 // Get all files from the selected folder and display them in the list
-                listFiles.Items.Clear();  // Clear the previous list
+                listFilePaths.Items.Clear();  // Clear the previous list
                 string[] files = Directory.GetFiles(selectedFolder);
                 foreach (var file in files)
                 {
-                    listFiles.Items.Add(file);  // Add file path to the list
+                    listFilePaths.Items.Add(file);  // Add file path to the list
                 }
 
                 // Check and update the button state
@@ -191,7 +191,7 @@ namespace ExportadorDeLaudos
             }
         }
 
-        private void ListFiles_DragEnter(object sender, DragEventArgs e)
+        private void ListFilePaths_DragEnter(object sender, DragEventArgs e)
         {
             // Check if the dragged data is of file type
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -204,22 +204,22 @@ namespace ExportadorDeLaudos
             }
         }
 
-        private void ListFiles_DragDrop(object sender, DragEventArgs e)
+        private void ListFilePaths_DragDrop(object sender, DragEventArgs e)
         {
             // Get the files being dragged
-            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+            string[] filePaths = (string[])e.Data.GetData(DataFormats.FileDrop);
 
             // Add files to the list box and ensure no duplicates
-            foreach (var file in files)
+            foreach (var filePath in filePaths)
             {
-                if (!listFiles.Items.Contains(file))
+                if (!listFilePaths.Items.Contains(filePath))
                 {
-                    listFiles.Items.Add(file);
+                    listFilePaths.Items.Add(filePath);
                 }
             }
 
             // Enable the process button if files are selected
-            buttonSendToOrbis.Enabled = listFiles.Items.Count > 0;
+            buttonSendToOrbis.Enabled = listFilePaths.Items.Count > 0;
         }
 
         private void ButtonSendToOrbis_Click(object sender, EventArgs e)
@@ -227,14 +227,22 @@ namespace ExportadorDeLaudos
             // Here you can implement the behavior for the second button
             // For now, let's show the selected inputs for demonstration
             string reportType = comboReportType.SelectedItem.ToString();
-            decimal yearAsDecimalForSomeReason = year.Value;
-            decimal maxFilesAsDecimalForSomeReason = maxFiles.Value;
+            var yearAsDouble = (double)year.Value;
+            var maxFilesAsDouble = (double)maxFiles.Value;
 
             // Uma chamada para cada arquivo na lista. O ano é constante, o número máximo de arquivos é constante mas o número de
             // protocolo precisa ser atualizado a cada registro dentro do loop.
-            var teste = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr((double)2015, (double)4);
 
-            MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDecimalForSomeReason}\nNúmero máximo de arquivos: {maxFilesAsDecimalForSomeReason}\nProcessando a requisição...");
+            foreach (string filePath in listFilePaths.Items)
+            {
+                var protocoloReqNr = double.Parse(filePath.Substring(filePath.Length - 10, 6));
+                var relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
+
+                MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
+            }
+            //var teste = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr((double)yearAsDouble, (double)4);
+
+            //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
         }
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
@@ -248,7 +256,7 @@ namespace ExportadorDeLaudos
             // Enable the button only if both conditions are met:
             // 1. The list is not empty
             // 2. The ComboBox has a selected item
-            buttonSendToOrbis.Enabled = listFiles.Items.Count > 0 && comboReportType.SelectedIndex != -1; //mudar o segundo pra 'is not null'?
+            buttonSendToOrbis.Enabled = listFilePaths.Items.Count > 0 && comboReportType.SelectedIndex != -1; //mudar o segundo pra 'is not null'?
         }
     }
 }
