@@ -2,24 +2,33 @@
 using ExportadorDeLaudos.Models;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.Configuration;
 
 namespace ExportadorDeLaudos.Repository
 {
     public class RelatorioAtualizadoRepository : IRelatorioAtualizadoRepository
     {
-        private readonly string connectionString = "Exemplo de connection string que funcionaria pro nosso banco";
-        
+        private readonly string _connectionString;
+        //private readonly string teste = _configuration.GetConnectionString("PCPALaudos");
+
+        public RelatorioAtualizadoRepository(IConfiguration configuration)
+        {
+            // Retrieve the connection string from the appsettings.json
+            _connectionString = configuration.GetConnectionString("PCPALaudos")!;
+        }
+
         public RelatorioAtualizado GetRelatorioAtualizadoByAnoAndProtocoloReqNr(double ANO, double PROTOCOLO_REQ_NR)
         {
             try
             {
                 var relatorioAtualizado = new RelatorioAtualizado();
 
-                using (var connection = new SqlConnection(connectionString))
+                using (var connection = new SqlConnection(_connectionString))
                 {
+                    //connection.CommandTimeout = 10;
                     connection.Open();
                     string query = "SELECT * " +
-                                   "FROM dbo.PCPA_LAUDOS.RELATORIO_ATUALIZADO " +
+                                   "FROM dbo.RELATORIO_ATUALIZADO " +
                                    "WHERE ANO = @ANO AND PROTOCOLO_REQ_NR = @PROTOCOLO_REQ_NR";
 
                     using (var command = new SqlCommand(query, connection))
@@ -40,7 +49,7 @@ namespace ExportadorDeLaudos.Repository
                                     REGIONAL = reader.GetString(reader.GetOrdinal("REGIONAL")),
                                     PROTOCOLO_REQ_NR = reader.GetDouble(reader.GetOrdinal("PROTOCOLO_REQ_NR")),
                                     NOME = reader.GetString(reader.GetOrdinal("NOME")),
-                                    PROTOCOLO = reader.GetString(reader.GetOrdinal("PROTCOLO")),
+                                    PROTOCOLO = reader.GetString(reader.GetOrdinal("PROTOCOLO")),
                                     EXAME = reader.GetString(reader.GetOrdinal("EXAME")),
                                     STATUS = reader.GetString(reader.GetOrdinal("STATUS")),
                                     LAUDO_PERITOS = reader.GetString(reader.GetOrdinal("LAUDO_PERITOS")),
@@ -52,9 +61,10 @@ namespace ExportadorDeLaudos.Repository
 
                 return relatorioAtualizado;
             }
-            catch
+            catch(Exception ex)
             {
-                throw;
+                Console.WriteLine(ex.StackTrace.ToString());
+                return null;
             }
         }
     }

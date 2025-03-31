@@ -1,3 +1,5 @@
+using ExportadorDeLaudos.Repository;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Windows.Forms;
 
@@ -14,10 +16,17 @@ namespace ExportadorDeLaudos
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
+
+            var configuration = new ConfigurationBuilder()
+                                        .SetBasePath(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName) // Set the base path
+                                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Load appsettings.json
+                                        .Build();
+
             // Enables visual styles and sets default font rendering to be compatible with Windows Forms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new Form1(configuration));
+            //Application.Run(new Form1());
         }
     }
 }

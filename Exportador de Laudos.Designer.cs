@@ -93,7 +93,6 @@ namespace ExportadorDeLaudos
             // year
             // 
             year.Location = new Point(186, 426);
-            //year.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             year.Minimum = 0;
             year.Maximum = 2125;
             year.Name = "year";
@@ -231,7 +230,9 @@ namespace ExportadorDeLaudos
             decimal yearAsDecimalForSomeReason = year.Value;
             decimal maxFilesAsDecimalForSomeReason = maxFiles.Value;
 
-
+            // Uma chamada para cada arquivo na lista. O ano é constante, o número máximo de arquivos é constante mas o número de
+            // protocolo precisa ser atualizado a cada registro dentro do loop.
+            var teste = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr((double)2015, (double)4);
 
             MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDecimalForSomeReason}\nNúmero máximo de arquivos: {maxFilesAsDecimalForSomeReason}\nProcessando a requisição...");
         }
