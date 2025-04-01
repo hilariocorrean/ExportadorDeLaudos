@@ -212,7 +212,7 @@ namespace ExportadorDeLaudos
             // Add files to the list box and ensure no duplicates
             foreach (var filePath in filePaths)
             {
-                if (!listFilePaths.Items.Contains(filePath))
+                if (!listFilePaths.Items.Contains(filePath)) // A eliminação dos 'OK_(...)' e filtro para ler apenas .pdf pode ser aqui.
                 {
                     listFilePaths.Items.Add(filePath);
                 }
@@ -232,17 +232,48 @@ namespace ExportadorDeLaudos
 
             // Uma chamada para cada arquivo na lista. O ano é constante, o número máximo de arquivos é constante mas o número de
             // protocolo precisa ser atualizado a cada registro dentro do loop.
-
+            var unsuccessfulFilePathsList = new List<string>();
+            var fileCounter = 0;
             foreach (string filePath in listFilePaths.Items)
             {
-                var protocoloReqNr = double.Parse(filePath.Substring(filePath.Length - 10, 6));
-                var relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
+                if (fileCounter < (int)maxFilesAsDouble)
+                {
+                    var protocoloReqNr = double.Parse(filePath.Substring(filePath.Length - 10, 6));
+                    var relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
 
-                MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
+                    MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
+
+                    // Daqui para baixo é o tratamento pós-retorno da API
+
+                    // if (returnCode == 200)
+                    string directoryPath = Path.GetDirectoryName(filePath); // Get the directory path
+                    string fileName = Path.GetFileName(filePath); // Get the original file name
+                    string newFileName = "OK_" + fileName; // New file name with "OK_" prefix
+                    string newFilePath = Path.Combine(directoryPath, newFileName); // Combine path with new name
+                    try
+                    {
+                        File.Move(filePath, newFilePath); // Rename the file on the disk
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error renaming file: {ex.Message}");
+                    }
+
+                    // else
+                    //unsuccessfulFilePathsList.Add(filePath);
+                    fileCounter++;
+                }
             }
-            //var teste = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr((double)yearAsDouble, (double)4);
 
-            //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
+            while (fileCounter > 0)
+            {
+                listFilePaths.Items.RemoveAt(0); // Elimina os arquivos em ordem
+                fileCounter--;
+            }
+            foreach (string unsuccessfulFilePath in unsuccessfulFilePathsList)
+            {
+                listFilePaths.Items.Add(unsuccessfulFilePath);
+            }
         }
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
