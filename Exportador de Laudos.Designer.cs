@@ -66,6 +66,7 @@ namespace ExportadorDeLaudos
             buttonSelectFolder.Size = new Size(269, 37);
             buttonSelectFolder.TabIndex = 0;
             buttonSelectFolder.Text = "Selecionar a pasta com os arquivos...";
+            //buttonSelectFolder.
             buttonSelectFolder.Click += ButtonSelectFolder_Click;
             // 
             // listFilePaths
@@ -76,8 +77,6 @@ namespace ExportadorDeLaudos
             listFilePaths.SelectionMode = SelectionMode.None;
             listFilePaths.Size = new Size(1004, 324);
             listFilePaths.TabIndex = 1;
-            listFilePaths.DragDrop += ListFilePaths_DragDrop;
-            listFilePaths.DragEnter += ListFilePaths_DragEnter;
             // 
             // comboReportType
             // 
@@ -180,7 +179,8 @@ namespace ExportadorDeLaudos
 
                 // Get all files from the selected folder and display them in the list
                 listFilePaths.Items.Clear();  // Clear the previous list
-                string[] files = Directory.GetFiles(selectedFolder);
+                List<string> files = Directory.GetFiles(selectedFolder, "*.pdf", SearchOption.AllDirectories)
+                                          .Where(s => !s.Contains("OK_")).ToList(); 
                 foreach (var file in files)
                 {
                     listFilePaths.Items.Add(file);  // Add file path to the list
@@ -189,37 +189,6 @@ namespace ExportadorDeLaudos
                 // Check and update the button state
                 UpdateSendToOrbisButtonState();
             }
-        }
-
-        private void ListFilePaths_DragEnter(object sender, DragEventArgs e)
-        {
-            // Check if the dragged data is of file type
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effect = DragDropEffects.Move;  // Allow move operation
-            }
-            else
-            {
-                e.Effect = DragDropEffects.None;  // Disallow drop
-            }
-        }
-
-        private void ListFilePaths_DragDrop(object sender, DragEventArgs e)
-        {
-            // Get the files being dragged
-            string[] filePaths = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-            // Add files to the list box and ensure no duplicates
-            foreach (var filePath in filePaths)
-            {
-                if (!listFilePaths.Items.Contains(filePath)) // A eliminação dos 'OK_(...)' e filtro para ler apenas .pdf pode ser aqui.
-                {
-                    listFilePaths.Items.Add(filePath);
-                }
-            }
-
-            // Enable the process button if files are selected
-            buttonSendToOrbis.Enabled = listFilePaths.Items.Count > 0;
         }
 
         private void ButtonSendToOrbis_Click(object sender, EventArgs e)
