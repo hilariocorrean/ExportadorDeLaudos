@@ -1,3 +1,4 @@
+using ExportadorDeLaudos.Contracts;
 using ExportadorDeLaudos.Repository;
 using Microsoft.Extensions.Configuration;
 
@@ -6,6 +7,8 @@ namespace ExportadorDeLaudos
     public partial class Form1 : Form
     {
         private readonly IConfigurationRoot _configuration;
+        private readonly IRelatorioAtualizadoRepository _relatorioAtualizadoRepository;
+
 
         public Form1()
         {
@@ -16,7 +19,7 @@ namespace ExportadorDeLaudos
         {
             this._configuration = configuration;
             InitializeComponent();
-            relatorioAtualizadoRepository = new RelatorioAtualizadoRepository(configuration);
+            _relatorioAtualizadoRepository = new RelatorioAtualizadoRepository(configuration);
         }
 
 
@@ -58,9 +61,11 @@ namespace ExportadorDeLaudos
                 if (fileCounter < (int)maxFilesAsDouble)
                 {
                     var protocoloReqNr = double.Parse(filePath.Substring(filePath.Length - 10, 6));
-                    var relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
+                    var relatorioAtualizado = _relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
 
                     MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
+
+                    //var token = 
 
                     // Daqui para baixo é o tratamento pós-retorno da API
 

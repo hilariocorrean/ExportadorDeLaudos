@@ -21,7 +21,6 @@ namespace ExportadorDeLaudos
         private Label labelMaxFiles;
         private FolderBrowserDialog folderBrowserDialog;
         private OpenFileDialog openFileDialog;
-        private IRelatorioAtualizadoRepository relatorioAtualizadoRepository;
 
         /// <summary>
         ///  Clean up any resources being used.
