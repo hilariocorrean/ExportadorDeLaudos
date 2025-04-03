@@ -9,7 +9,6 @@ namespace ExportadorDeLaudos.Repository
     public class RelatorioAtualizadoRepository : IRelatorioAtualizadoRepository
     {
         private readonly string _connectionString;
-        //private readonly string teste = _configuration.GetConnectionString("PCPALaudos");
 
         public RelatorioAtualizadoRepository(IConfiguration configuration)
         {
@@ -64,7 +63,7 @@ namespace ExportadorDeLaudos.Repository
             catch(Exception ex)
             {
                 MessageBox.Show(ex.StackTrace!.ToString());
-                return null;
+                return new RelatorioAtualizado();
             }
         }
     }

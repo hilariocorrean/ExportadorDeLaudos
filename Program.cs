@@ -22,10 +22,15 @@ namespace ExportadorDeLaudos
                                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Load appsettings.json
                                         .Build();
 
+            var httpClient = new HttpClient
+            {
+                BaseAddress = new Uri(configuration["OrbisSettings:URL"]!),               
+            };
+
             // Enables visual styles and sets default font rendering to be compatible with Windows Forms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(configuration));
+            Application.Run(new Form1(configuration, httpClient));
             //Application.Run(new Form1());
         }
     }

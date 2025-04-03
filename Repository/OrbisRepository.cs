@@ -4,6 +4,7 @@ using ExportadorDeLaudos.Models.Orbis.Document;
 using ExportadorDeLaudos.Models.Orbis.Login;
 using ExportadorDeLaudos.Models.Orbis.TypeOfs;
 using Microsoft.AspNetCore.Http.Internal;
+using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
@@ -14,10 +15,18 @@ namespace ExportadorDeLaudos.Repository;
 public class OrbisRepository : IOrbisRepository
 {
 	private readonly HttpClient _httpClient;
+	//private readonly string orbisUrl;
+	//private readonly string orbisAdmUser;
+	//private readonly string orbisAdmPass;
 
 	public OrbisRepository(HttpClient httpClient)
 	{
 		_httpClient = httpClient;
+		//_httpClient.BaseAddress = new Uri(configuration["OrbisSettings:URL"]!);
+
+  //      orbisUrl = configuration["OrbisSettings:URL"]!;
+		//orbisAdmUser = configuration["OrbisSettings:AdmUser"]!;
+		//orbisAdmPass = configuration["OrbisSettings:AdmPass"]!;
 	}
 
 	public async Task<List<OrbisDocument>> FindDocumentAsync(string documentTypeId, Dictionary<string, string> searchValues, string authToken)

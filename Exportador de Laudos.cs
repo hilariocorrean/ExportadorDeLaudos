@@ -7,19 +7,19 @@ namespace ExportadorDeLaudos
     public partial class Form1 : Form
     {
         private readonly IConfigurationRoot _configuration;
-        private readonly IRelatorioAtualizadoRepository _relatorioAtualizadoRepository;
+        private readonly IRelatorioAtualizadoRepository relatorioAtualizadoRepository;
+        private readonly IOrbisRepository orbisRepository;
+        private readonly string admUser;
+        private readonly string admPass;
 
-
-        public Form1()
+        public Form1(IConfigurationRoot configuration, HttpClient _httpClient)
         {
+            _configuration = configuration;
             InitializeComponent();
-        }
-
-        public Form1(IConfigurationRoot configuration)
-        {
-            this._configuration = configuration;
-            InitializeComponent();
-            _relatorioAtualizadoRepository = new RelatorioAtualizadoRepository(configuration);
+            relatorioAtualizadoRepository = new RelatorioAtualizadoRepository(configuration);
+            orbisRepository = new OrbisRepository(_httpClient);
+            admUser = _configuration["OrbisSettings:AdmUser"]!;
+            admPass = _configuration["OrbisSettings:AdmPass"]!;
         }
 
 
@@ -44,11 +44,11 @@ namespace ExportadorDeLaudos
             }
         }
 
-        private void ButtonSendToOrbis_Click(object sender, EventArgs e)
+        private async void ButtonSendToOrbis_Click(object sender, EventArgs e)
         {
             // Here you can implement the behavior for the second button
             // For now, let's show the selected inputs for demonstration
-            string reportType = comboReportType.SelectedItem.ToString();
+            string reportType = comboReportType.SelectedItem!.ToString()!;
             var yearAsDouble = (double)year.Value;
             var maxFilesAsDouble = (double)maxFiles.Value;
 
@@ -61,16 +61,16 @@ namespace ExportadorDeLaudos
                 if (fileCounter < (int)maxFilesAsDouble)
                 {
                     var protocoloReqNr = double.Parse(filePath.Substring(filePath.Length - 10, 6));
-                    var relatorioAtualizado = _relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
+                    var relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
 
                     MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
 
-                    //var token = 
+                    var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
 
                     // Daqui para baixo é o tratamento pós-retorno da API
 
                     // if (returnCode == 200)
-                    string directoryPath = Path.GetDirectoryName(filePath); // Get the directory path
+                    string directoryPath = Path.GetDirectoryName(filePath)!; // Get the directory path
                     string fileName = Path.GetFileName(filePath); // Get the original file name
                     string newFileName = "OK_" + fileName; // New file name with "OK_" prefix
                     string newFilePath = Path.Combine(directoryPath, newFileName); // Combine path with new name
