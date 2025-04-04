@@ -22,11 +22,6 @@ public class OrbisRepository : IOrbisRepository
 	public OrbisRepository(HttpClient httpClient)
 	{
 		_httpClient = httpClient;
-		//_httpClient.BaseAddress = new Uri(configuration["OrbisSettings:URL"]!);
-
-  //      orbisUrl = configuration["OrbisSettings:URL"]!;
-		//orbisAdmUser = configuration["OrbisSettings:AdmUser"]!;
-		//orbisAdmPass = configuration["OrbisSettings:AdmPass"]!;
 	}
 
 	public async Task<List<OrbisDocument>> FindDocumentAsync(string documentTypeId, Dictionary<string, string> searchValues, string authToken)
@@ -158,8 +153,9 @@ public class OrbisRepository : IOrbisRepository
 
 		_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 		var response = await _httpClient.PostAsync("Documents/UploadFile", content);
-		response.EnsureSuccessStatusCode();
+		//response.EnsureSuccessStatusCode(); // desabilitar
 
+		//var teste = response.IsSuccessStatusCode;
 		var responseContent = await response.Content.ReadAsStringAsync();
 		return responseContent;
 	}
