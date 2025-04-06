@@ -1,6 +1,7 @@
 using ExportadorDeLaudos.Contracts;
 using ExportadorDeLaudos.Models.Orbis;
 using ExportadorDeLaudos.Repository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 
@@ -50,35 +51,35 @@ namespace ExportadorDeLaudos
         // índices possíveis para o tipo documental em questão.
         // TODO: Adicionar à lista de argumentos a lista de keywords retornadas do GetKeywordsTypeOfsAsync, de modo que
         // KeywordTypeOf = Id e Value é associado a uma Label retornada.
-        private List<OrbisDocKeywordVersion> GetOrbisDocKeywordVersionsList(string modalidadeCplAdministrativo, double ano, double numero)
+        private List<OrbisDocKeywordVersion> GetOrbisDocKeywordVersionsList(string modalidadeDeLaudos, double protocolo, string nome)
         {
             var keywordVersionList = new List<OrbisDocKeywordVersion>();
 
-            var modalidadeCplAdministrativoKeyword = new OrbisDocKeywordVersion
+            var modalidadeDeLaudosKeyword = new OrbisDocKeywordVersion
             {
-                KeywordTypeOf = "0353a39a-ab73-47b4-b22e-e3ac614a6d27",
+                KeywordTypeOf = "d6e52ab8-66a4-471d-8a29-2a4e9f315793",
                 Enable = 1,
                 Status = 1,
-                Value = modalidadeCplAdministrativo
+                Value = modalidadeDeLaudos
             };
-            var anoKeyword = new OrbisDocKeywordVersion
+            var protocoloKeyword = new OrbisDocKeywordVersion
             {
-                KeywordTypeOf = "0081d214-7bbd-44ef-963c-d1c31f9b5f08",
+                KeywordTypeOf = "a0f59e97-39ab-4b8d-92b7-368b88ae38de",
                 Enable = 1,
                 Status = 1,
-                Value = ((int)ano).ToString()
+                Value = ((int)protocolo).ToString() // pode ser a origem do problema
             };
-            var numeroKeyword = new OrbisDocKeywordVersion
+            var nomeKeyword = new OrbisDocKeywordVersion
             {
-                KeywordTypeOf = "1de2cde7-7a2d-40ad-94e9-331d5248f053",
+                KeywordTypeOf = "f2b32dcd-427c-4afd-9180-1dfa4c80fa44",
                 Enable = 1,
                 Status = 1,
-                Value = ((int)numero).ToString()
+                Value = nome
             };
 
-            keywordVersionList.Add(modalidadeCplAdministrativoKeyword);
-            keywordVersionList.Add(anoKeyword);
-            keywordVersionList.Add(numeroKeyword);
+            keywordVersionList.Add(modalidadeDeLaudosKeyword);
+            keywordVersionList.Add(protocoloKeyword);
+            keywordVersionList.Add(nomeKeyword);
 
             return keywordVersionList;
         }
@@ -131,48 +132,58 @@ namespace ExportadorDeLaudos
                 {
                     var protocoloReqNr = double.Parse(filePath.Substring(filePath.Length - 10, 6));
                     var relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
+                    if (relatorioAtualizado.ID == 0)
+                    {
+                        MessageBox.Show($"Algo deu errado. Verifique o ano do documento.");
+                        return;
+                    }
+                    string nomeCidadao = relatorioAtualizado.NOME!.ToUpper();
+
                     string fileName = Path.GetFileName(filePath); // Get the original file name
 
                     //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
-                   // MessageBox.Show($"Processando a requisição...");
-
                     var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
                     // Por enquanto, vou pular o passo de levantar o índice (keyword) a partir do tipo documental (typeof).
                     // Tipo documental: Coordenação de perícias vivo ou morto
                     var typeOf = "5d937fae-6564-491b-bc3b-4385bd2de9de";
+                    var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
+
+                    // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
+                    var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocoloReqNr, nomeCidadao);
+                    var orbisDocVersions = GetOrbisDocVersionsList(fileName, typeOf, orbisDocKeywordVersions);
+                    var orbisDocProperties = GetOrbisDocProperties(typeOf, orbisDocVersions);
 
                     // Preparo do objeto do documento a ser enviado em Documents/UploadFile
                     var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                    var document = new FormFile(fileStream, 0, fileStream.Length, "file", fileName) //VER SE O NOME ESPERADO É file MESMO
+                    var document = new FormFile(fileStream, 0, fileStream.Length, "File", fileName) //VER SE O NOME ESPERADO É file MESMO
                     {
-                        ContentType = "application/pdf"  // Set appropriate content type
-                    };
-
-                    // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
-                    var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, yearAsDouble, maxFilesAsDouble);
-                    var orbisDocVersions = GetOrbisDocVersionsList(fileName, typeOf, orbisDocKeywordVersions);
-                    var orbisDocProperties = GetOrbisDocProperties(typeOf,  orbisDocVersions);
+                        Headers = new HeaderDictionary(),
+                        ContentType = "application/pdf"  
+                    };                   
 
                     // Chamada a Documents/UploadFile
-                    var uploadStatus = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
-
+                    (var responseAsString, var isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
+                    
                     // Tratamento pós-retorno da API
-
-                    // if (returnCode == 200)
-                    string directoryPath = Path.GetDirectoryName(filePath)!; // Get the directory path
-                    string newFileName = "OK_" + fileName; // New file name with "OK_" prefix
-                    string newFilePath = Path.Combine(directoryPath, newFileName); // Combine path with new name
-                    try
+                    fileStream.Close();
+                    if (isSuccess)
                     {
-                        File.Move(filePath, newFilePath); // Rename the file on the disk
+                        string directoryPath = Path.GetDirectoryName(filePath)!; // Get the directory path
+                        string newFileName = "OK_" + fileName; // New file name with "OK_" prefix
+                        string newFilePath = Path.Combine(directoryPath, newFileName); // Combine path with new name
+                        try
+                        {
+                            File.Move(filePath, newFilePath); // Rename the file on the disk
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Error renaming file:\n {ex.Message}\n {ex.StackTrace}");
+                        }
                     }
-                    catch (Exception ex)
+                    else
                     {
-                        MessageBox.Show($"Error renaming file: {ex.Message}");
+                        unsuccessfulFilePathsList.Add(filePath);
                     }
-
-                    // else
-                    //unsuccessfulFilePathsList.Add(filePath);
                     fileCounter++;
                 }
             }

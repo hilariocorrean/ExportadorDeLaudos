@@ -3,6 +3,7 @@ using ExportadorDeLaudos.Models.Orbis;
 using ExportadorDeLaudos.Models.Orbis.Document;
 using ExportadorDeLaudos.Models.Orbis.Login;
 using ExportadorDeLaudos.Models.Orbis.TypeOfs;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 using System.Net.Http.Headers;
@@ -15,9 +16,6 @@ namespace ExportadorDeLaudos.Repository;
 public class OrbisRepository : IOrbisRepository
 {
 	private readonly HttpClient _httpClient;
-	//private readonly string orbisUrl;
-	//private readonly string orbisAdmUser;
-	//private readonly string orbisAdmPass;
 
 	public OrbisRepository(HttpClient httpClient)
 	{
@@ -133,7 +131,7 @@ public class OrbisRepository : IOrbisRepository
 		return orbisJwt.Token ?? "";
 	}
 
-	public async Task<string> UploadDocumentAsync(FormFile document, OrbisDocProperties docProperties, string authToken)
+	public async Task<(string, bool)> UploadDocumentAsync(FormFile document, OrbisDocProperties docProperties, string authToken)
 	{
 		if (_httpClient.BaseAddress == null || _httpClient.BaseAddress.ToString() == "")
 		{
@@ -151,12 +149,21 @@ public class OrbisRepository : IOrbisRepository
 			{ new StringContent(JsonSerializer.Serialize(properties), Encoding.UTF8, "application/json"), "json" }
 		};
 
-		_httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
+        //foreach (var part in content)
+        //{
+        //    if (part is StringContent stringContent)
+        //    {
+        //        var jsonText = stringContent.ReadAsStringAsync().Result;
+        //    }
+        //}
+
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authToken);
 		var response = await _httpClient.PostAsync("Documents/UploadFile", content);
 		//response.EnsureSuccessStatusCode(); // desabilitar
 
-		//var teste = response.IsSuccessStatusCode;
 		var responseContent = await response.Content.ReadAsStringAsync();
-		return responseContent;
+        var isSuccess = response.IsSuccessStatusCode;
+
+        return (responseContent, isSuccess);
 	}
 }

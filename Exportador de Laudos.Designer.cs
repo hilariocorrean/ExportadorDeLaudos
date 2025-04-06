@@ -79,7 +79,7 @@ namespace ExportadorDeLaudos
             // 
             // comboReportType
             // 
-            comboReportType.Items.AddRange(new object[] { "Laudo vivo", "Laudo morto" });
+            comboReportType.Items.AddRange(new object[] { "PERÍCIA NO VIVO", "PERÍCIA NO MORTO" });
             comboReportType.Location = new Point(186, 396);
             comboReportType.Name = "comboReportType";
             comboReportType.Size = new Size(121, 28);
