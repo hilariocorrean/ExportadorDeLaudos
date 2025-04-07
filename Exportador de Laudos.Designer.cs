@@ -65,7 +65,6 @@ namespace ExportadorDeLaudos
             buttonSelectFolder.Size = new Size(269, 37);
             buttonSelectFolder.TabIndex = 0;
             buttonSelectFolder.Text = "Selecionar a pasta com os arquivos...";
-            //buttonSelectFolder.
             buttonSelectFolder.Click += ButtonSelectFolder_Click;
             // 
             // listFilePaths
@@ -82,29 +81,27 @@ namespace ExportadorDeLaudos
             comboReportType.Items.AddRange(new object[] { "PERÍCIA NO VIVO", "PERÍCIA NO MORTO" });
             comboReportType.Location = new Point(186, 396);
             comboReportType.Name = "comboReportType";
-            comboReportType.Size = new Size(121, 28);
+            comboReportType.Size = new Size(173, 28);
             comboReportType.TabIndex = 2;
             comboReportType.Text = "Selecionar...";
-            comboReportType.SelectedIndex = -1; // No default selection
-            comboReportType.SelectedIndexChanged += ComboReportType_SelectedIndexChanged; // Handle selection change
+            comboReportType.SelectedIndexChanged += ComboReportType_SelectedIndexChanged;
             // 
             // year
             // 
             year.Location = new Point(186, 426);
-            year.Minimum = 0;
-            year.Maximum = 2125;
+            year.Maximum = new decimal(new int[] { 2125, 0, 0, 0 });
             year.Name = "year";
-            year.Size = new Size(120, 27);
+            year.Size = new Size(172, 27);
             year.TabIndex = 3;
-            year.Value = DateTime.Now.Year;
+            year.Value = new decimal(new int[] { 2025, 0, 0, 0 });
             // 
             // maxFiles
             // 
             maxFiles.Location = new Point(186, 456);
-            maxFiles.Minimum = 1;
-            maxFiles.Maximum = 2147483647; //int max lol
+            maxFiles.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
+            maxFiles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             maxFiles.Name = "maxFiles";
-            maxFiles.Size = new Size(120, 27);
+            maxFiles.Size = new Size(172, 27);
             maxFiles.TabIndex = 4;
             maxFiles.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
@@ -145,7 +142,7 @@ namespace ExportadorDeLaudos
             labelMaxFiles.TabIndex = 8;
             labelMaxFiles.Text = "Nº máximo de arquivos";
             // 
-            // Form1
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
