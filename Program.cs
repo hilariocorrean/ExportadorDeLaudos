@@ -30,7 +30,7 @@ namespace ExportadorDeLaudos
             // Enables visual styles and sets default font rendering to be compatible with Windows Forms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1(configuration, httpClient));
+            Application.Run(new MainForm(configuration, httpClient));
             //Application.Run(new Form1());
         }
     }

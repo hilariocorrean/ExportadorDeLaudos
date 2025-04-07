@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace ExportadorDeLaudos
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -159,8 +159,8 @@ namespace ExportadorDeLaudos
             Controls.Add(year);
             Controls.Add(maxFiles);
             Controls.Add(buttonSendToOrbis);
-            Name = "Form1";
-            Text = "Exportador de Laudos";
+            Name = "MainForm";
+            Text = "Exportador de Laudos - Coordenação de Perícias Vivo ou Morto";
             ((System.ComponentModel.ISupportInitialize)year).EndInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).EndInit();
             ResumeLayout(false);

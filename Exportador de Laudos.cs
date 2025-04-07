@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace ExportadorDeLaudos
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private readonly IConfigurationRoot _configuration;
         private readonly IRelatorioAtualizadoRepository relatorioAtualizadoRepository;
@@ -15,7 +15,7 @@ namespace ExportadorDeLaudos
         private readonly string admUser;
         private readonly string admPass;
 
-        public Form1(IConfigurationRoot configuration, HttpClient _httpClient)
+        public MainForm(IConfigurationRoot configuration, HttpClient _httpClient)
         {
             _configuration = configuration;
             InitializeComponent();
