@@ -126,6 +126,10 @@ namespace ExportadorDeLaudos
             // protocolo precisa ser atualizado a cada registro dentro do loop.
             var unsuccessfulFilePathsList = new List<string>();
             var fileCounter = 0;
+
+            var processingRequestForm = new ProcessingRequestForm();
+            processingRequestForm.Show();
+
             foreach (string filePath in listFilePaths.Items)
             {
                 if (fileCounter < (int)maxFilesAsDouble)
@@ -197,6 +201,8 @@ namespace ExportadorDeLaudos
             {
                 listFilePaths.Items.Add(unsuccessfulFilePath);
             }
+
+            processingRequestForm.Close();
         }
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
