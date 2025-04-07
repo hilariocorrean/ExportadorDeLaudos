@@ -18,7 +18,6 @@ namespace ExportadorDeLaudos
             ApplicationConfiguration.Initialize();
 
             var configuration = new ConfigurationBuilder()
-                                        .SetBasePath(Directory.GetParent(Directory.GetCurrentDirectory())!.Parent!.Parent!.FullName) // Set the base path
                                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) // Load appsettings.json
                                         .Build();
 
