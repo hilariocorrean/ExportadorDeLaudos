@@ -30,7 +30,6 @@ namespace ExportadorDeLaudos
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new MainForm(configuration, httpClient));
-            //Application.Run(new Form1());
         }
     }
 }
