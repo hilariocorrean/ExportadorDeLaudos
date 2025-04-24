@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ExportadorDeLaudos.Models.Orbis.Document;
+namespace ImportadorDeLaudos.Models.Orbis.Document;
 
 public class OrbisDocumentKey
 {

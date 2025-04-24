@@ -1,13 +1,13 @@
-using ExportadorDeLaudos.Contracts;
-using ExportadorDeLaudos.Models.Orbis;
-using ExportadorDeLaudos.Repository;
+using ImportadorDeLaudos.Contracts;
+using ImportadorDeLaudos.Models.Orbis;
+using ImportadorDeLaudos.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
 
-namespace ExportadorDeLaudos
+namespace ImportadorDeLaudos
 {
-    public partial class MainForm : Form
+    public partial class CoordenacaoDePericiasVivoEMortoForm : Form
     {
         private readonly IConfigurationRoot _configuration;
         private readonly IRelatorioAtualizadoRepository relatorioAtualizadoRepository;
@@ -15,7 +15,7 @@ namespace ExportadorDeLaudos
         private readonly string admUser;
         private readonly string admPass;
 
-        public MainForm(IConfigurationRoot configuration, HttpClient _httpClient)
+        public CoordenacaoDePericiasVivoEMortoForm(IConfigurationRoot configuration, HttpClient _httpClient)
         {
             _configuration = configuration;
             InitializeComponent();

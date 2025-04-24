@@ -1,8 +1,8 @@
-﻿using ExportadorDeLaudos.Contracts;
-using ExportadorDeLaudos.Models.Orbis;
-using ExportadorDeLaudos.Models.Orbis.Document;
-using ExportadorDeLaudos.Models.Orbis.Login;
-using ExportadorDeLaudos.Models.Orbis.TypeOfs;
+﻿using ImportadorDeLaudos.Contracts;
+using ImportadorDeLaudos.Models.Orbis;
+using ImportadorDeLaudos.Models.Orbis.Document;
+using ImportadorDeLaudos.Models.Orbis.Login;
+using ImportadorDeLaudos.Models.Orbis.TypeOfs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +11,7 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 
-namespace ExportadorDeLaudos.Repository;
+namespace ImportadorDeLaudos.Repository;
 
 public class OrbisRepository : IOrbisRepository
 {

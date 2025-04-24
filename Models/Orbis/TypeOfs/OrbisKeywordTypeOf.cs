@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ExportadorDeLaudos.Models.Orbis.TypeOfs;
+namespace ImportadorDeLaudos.Models.Orbis.TypeOfs;
 
 public class OrbisKeywordTypeOf
 {

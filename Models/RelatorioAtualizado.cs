@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace ExportadorDeLaudos.Models
+namespace ImportadorDeLaudos.Models
 {
     public class RelatorioAtualizado
     {

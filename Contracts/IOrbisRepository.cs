@@ -1,10 +1,10 @@
-﻿using ExportadorDeLaudos.Models.Orbis;
-using ExportadorDeLaudos.Models.Orbis.Document;
-using ExportadorDeLaudos.Models.Orbis.TypeOfs;
+﻿using ImportadorDeLaudos.Models.Orbis;
+using ImportadorDeLaudos.Models.Orbis.Document;
+using ImportadorDeLaudos.Models.Orbis.TypeOfs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 
-namespace ExportadorDeLaudos.Contracts;
+namespace ImportadorDeLaudos.Contracts;
 
 public interface IOrbisRepository
 {

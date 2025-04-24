@@ -1,4 +1,4 @@
-﻿namespace ExportadorDeLaudos
+﻿namespace ImportadorDeLaudos
 {
     public class ProcessingRequestForm : Form
     {

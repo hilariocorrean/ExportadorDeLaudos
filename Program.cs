@@ -1,9 +1,9 @@
-using ExportadorDeLaudos.Repository;
+using ImportadorDeLaudos.Repository;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Windows.Forms;
 
-namespace ExportadorDeLaudos
+namespace ImportadorDeLaudos
 {
     internal static class Program
     {
@@ -29,7 +29,7 @@ namespace ExportadorDeLaudos
             // Enables visual styles and sets default font rendering to be compatible with Windows Forms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainForm(configuration, httpClient));
+            Application.Run(new CoordenacaoDePericiasVivoEMortoForm(configuration, httpClient));
         }
     }
 }

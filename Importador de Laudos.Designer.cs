@@ -1,10 +1,10 @@
-﻿using ExportadorDeLaudos.Contracts;
+﻿using ImportadorDeLaudos.Contracts;
 using System;
 using System.Windows.Forms;
 
-namespace ExportadorDeLaudos
+namespace ImportadorDeLaudos
 {
-    partial class MainForm
+    partial class CoordenacaoDePericiasVivoEMortoForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -157,7 +157,7 @@ namespace ExportadorDeLaudos
             Controls.Add(maxFiles);
             Controls.Add(buttonSendToOrbis);
             Name = "MainForm";
-            Text = "Exportador de Laudos - Coordenação de Perícias Vivo ou Morto";
+            Text = "Importador de Laudos - Coordenação de Perícias Vivo ou Morto";
             ((System.ComponentModel.ISupportInitialize)year).EndInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).EndInit();
             ResumeLayout(false);

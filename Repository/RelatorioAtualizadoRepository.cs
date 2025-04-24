@@ -1,10 +1,10 @@
-﻿using ExportadorDeLaudos.Contracts;
-using ExportadorDeLaudos.Models;
+﻿using ImportadorDeLaudos.Contracts;
+using ImportadorDeLaudos.Models;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
 
-namespace ExportadorDeLaudos.Repository
+namespace ImportadorDeLaudos.Repository
 {
     public class RelatorioAtualizadoRepository : IRelatorioAtualizadoRepository
     {

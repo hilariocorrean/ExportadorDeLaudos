@@ -1,4 +1,4 @@
-﻿namespace ExportadorDeLaudos.Models.DTOs
+﻿namespace ImportadorDeLaudos.Models.DTOs
 {
     public class GetTypeofsDTO
     {

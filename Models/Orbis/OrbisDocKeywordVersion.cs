@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ExportadorDeLaudos.Models.Orbis;
+namespace ImportadorDeLaudos.Models.Orbis;
 
 public class OrbisDocKeywordVersion
 {

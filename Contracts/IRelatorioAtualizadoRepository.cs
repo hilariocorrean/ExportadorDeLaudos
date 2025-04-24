@@ -1,6 +1,6 @@
-﻿using ExportadorDeLaudos.Models;
+﻿using ImportadorDeLaudos.Models;
 
-namespace ExportadorDeLaudos.Contracts
+namespace ImportadorDeLaudos.Contracts
 {
     public interface IRelatorioAtualizadoRepository
     {

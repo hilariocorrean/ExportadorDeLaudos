@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ExportadorDeLaudos.Models.Orbis.Login;
+namespace ImportadorDeLaudos.Models.Orbis.Login;
 
 public class OrbisJwt
 {
