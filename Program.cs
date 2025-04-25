@@ -29,7 +29,7 @@ namespace ImportadorDeLaudos
             // Enables visual styles and sets default font rendering to be compatible with Windows Forms
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CoordenacaoDePericiasVivoEMortoForm(configuration, httpClient));
+            Application.Run(new ImportadorDeLaudosForm(configuration, httpClient));
         }
     }
 }

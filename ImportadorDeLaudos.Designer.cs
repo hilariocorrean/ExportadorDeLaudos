@@ -1,6 +1,6 @@
 ﻿namespace ImportadorDeLaudos
 {
-    partial class ImportadorDeLaudos
+    partial class ImportadorDeLaudosForm
     {
         /// <summary>
         /// Required designer variable.
@@ -62,7 +62,7 @@
             tipoDocumentalLabel.TabIndex = 2;
             tipoDocumentalLabel.Text = "Por favor, selecione o Tipo Documental: ";
             // 
-            // LandingForm
+            // ImportadorDeLaudosForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -70,7 +70,7 @@
             Controls.Add(tipoDocumentalLabel);
             Controls.Add(coordenadoriaPsiquiatriaForenseBtn);
             Controls.Add(coordenacaoPericiasVivoMortoBtn);
-            Name = "LandingForm";
+            Name = "ImportadorDeLaudosForm";
             Text = "Importador de Laudos";
             ResumeLayout(false);
             PerformLayout();
