@@ -28,21 +28,18 @@ namespace ImportadorDeLaudos
 
         private void ButtonSelectFolder_Click(object sender, EventArgs e)
         {
-            // Open folder browser dialog to select a folder
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 string selectedFolder = folderBrowserDialog.SelectedPath;
 
-                // Get all files from the selected folder and display them in the list
-                listFilePaths.Items.Clear();  // Clear the previous list
+                listFilePaths.Items.Clear(); 
                 List<string> files = Directory.GetFiles(selectedFolder, "*.pdf", SearchOption.AllDirectories)
                                           .Where(s => !s.Contains("OK_")).ToList();
                 foreach (var file in files)
                 {
-                    listFilePaths.Items.Add(file);  // Add file path to the list
+                    listFilePaths.Items.Add(file);
                 }
 
-                // Check and update the button state
                 UpdateSendToOrbisButtonState();
             }
         }

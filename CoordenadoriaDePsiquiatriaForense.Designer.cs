@@ -14,10 +14,8 @@ namespace ImportadorDeLaudos
         private Button buttonSendToOrbis;
         private ListBox listFilePaths;
         private ComboBox comboReportType;
-        private NumericUpDown year;
         private NumericUpDown maxFiles;
         private Label labelReportType;
-        private Label labelYear;
         private Label labelMaxFiles;
         private FolderBrowserDialog folderBrowserDialog;
         private OpenFileDialog openFileDialog;
@@ -46,15 +44,12 @@ namespace ImportadorDeLaudos
             buttonSelectFolder = new Button();
             listFilePaths = new ListBox();
             comboReportType = new ComboBox();
-            year = new NumericUpDown();
             maxFiles = new NumericUpDown();
             buttonSendToOrbis = new Button();
             folderBrowserDialog = new FolderBrowserDialog();
             openFileDialog = new OpenFileDialog();
             labelReportType = new Label();
-            labelYear = new Label();
             labelMaxFiles = new Label();
-            ((System.ComponentModel.ISupportInitialize)year).BeginInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).BeginInit();
             SuspendLayout();
             // 
@@ -78,37 +73,29 @@ namespace ImportadorDeLaudos
             // 
             // comboReportType
             // 
-            comboReportType.Items.AddRange(new object[] { "PERÍCIA NO VIVO", "PERÍCIA NO MORTO" });
-            comboReportType.Location = new Point(186, 396);
+            comboReportType.Enabled = false;
+            comboReportType.Items.AddRange(new object[] { "LAUDOS" }); // se não, tentar MODALIDADE PSIQUIATRIA
+            comboReportType.Location = new Point(183, 403);
             comboReportType.Name = "comboReportType";
-            comboReportType.Size = new Size(173, 28);
+            comboReportType.Size = new Size(271, 28);
             comboReportType.TabIndex = 2;
-            comboReportType.Text = "Selecionar...";
+            comboReportType.Text = "LAUDOS";
             comboReportType.SelectedIndexChanged += ComboReportType_SelectedIndexChanged;
-            // 
-            // year
-            // 
-            year.Location = new Point(186, 426);
-            year.Maximum = new decimal(new int[] { 2125, 0, 0, 0 });
-            year.Name = "year";
-            year.Size = new Size(172, 27);
-            year.TabIndex = 3;
-            year.Value = new decimal(new int[] { 2025, 0, 0, 0 });
             // 
             // maxFiles
             // 
-            maxFiles.Location = new Point(186, 456);
+            maxFiles.Location = new Point(183, 436);
             maxFiles.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
             maxFiles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             maxFiles.Name = "maxFiles";
-            maxFiles.Size = new Size(172, 27);
+            maxFiles.Size = new Size(270, 27);
             maxFiles.TabIndex = 4;
             maxFiles.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
             // buttonSendToOrbis
             // 
             buttonSendToOrbis.Enabled = false;
-            buttonSendToOrbis.Location = new Point(10, 502);
+            buttonSendToOrbis.Location = new Point(7, 482);
             buttonSendToOrbis.Name = "buttonSendToOrbis";
             buttonSendToOrbis.Size = new Size(232, 28);
             buttonSendToOrbis.TabIndex = 5;
@@ -118,47 +105,35 @@ namespace ImportadorDeLaudos
             // labelReportType
             // 
             labelReportType.AutoSize = true;
-            labelReportType.Location = new Point(78, 399);
+            labelReportType.Location = new Point(75, 406);
             labelReportType.Name = "labelReportType";
             labelReportType.Size = new Size(102, 20);
             labelReportType.TabIndex = 6;
             labelReportType.Text = "Tipo de laudo";
             // 
-            // labelYear
-            // 
-            labelYear.AutoSize = true;
-            labelYear.Location = new Point(144, 428);
-            labelYear.Name = "labelYear";
-            labelYear.Size = new Size(36, 20);
-            labelYear.TabIndex = 7;
-            labelYear.Text = "Ano";
-            // 
             // labelMaxFiles
             // 
             labelMaxFiles.AutoSize = true;
-            labelMaxFiles.Location = new Point(15, 458);
+            labelMaxFiles.Location = new Point(12, 438);
             labelMaxFiles.Name = "labelMaxFiles";
             labelMaxFiles.Size = new Size(165, 20);
             labelMaxFiles.TabIndex = 8;
             labelMaxFiles.Text = "Nº máximo de arquivos";
             // 
-            // MainForm
+            // CoordenadoriaDePsiquiatriaForenseForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1083, 542);
             Controls.Add(labelMaxFiles);
-            Controls.Add(labelYear);
             Controls.Add(labelReportType);
             Controls.Add(buttonSelectFolder);
             Controls.Add(listFilePaths);
             Controls.Add(comboReportType);
-            Controls.Add(year);
             Controls.Add(maxFiles);
             Controls.Add(buttonSendToOrbis);
-            Name = "MainForm";
+            Name = "CoordenadoriaDePsiquiatriaForenseForm";
             Text = "Importador de Laudos - Coordenadoria de Psiquiatria Forense";
-            ((System.ComponentModel.ISupportInitialize)year).EndInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).EndInit();
             ResumeLayout(false);
             PerformLayout();
