@@ -116,8 +116,6 @@ namespace ImportadorDeLaudos
 
         private async void ButtonSendToOrbis_Click(object sender, EventArgs e)
         {
-            // Here you can implement the behavior for the second button
-            // For now, let's show the selected inputs for demonstration
             string reportType = comboReportType.SelectedItem!.ToString()!;
             var yearAsDouble = (double)year.Value;
             var maxFilesAsDouble = (double)maxFiles.Value;
@@ -143,7 +141,7 @@ namespace ImportadorDeLaudos
                     }
                     string nomeCidadao = relatorioAtualizado.NOME!.ToUpper();
 
-                    string fileName = Path.GetFileName(filePath); // Get the original file name
+                    string fileName = Path.GetFileName(filePath);
 
                     //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
                     var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
