@@ -41,6 +41,7 @@ namespace ImportadorDeLaudos
                     listFilePaths.Items.Add(file);
                 }
 
+                ResetComboReportTypeState();
                 UpdateSendToOrbisButtonState();
             }
         }
@@ -154,9 +155,9 @@ namespace ImportadorDeLaudos
                         if (relatorioAtualizado.ID == 0)
                         {
                             MessageBox.Show($"Algo deu errado. Verifique o ano do documento.");
-                            return;
+                            unsuccessfulFilePathsList.Add(filePath);
                         }
-                        protocoloReqNr = relatorioAtualizado.ANO;
+                        protocoloReqNr = relatorioAtualizado.PROTOCOLO_REQ_NR;
                     }
 
                     //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
@@ -177,30 +178,38 @@ namespace ImportadorDeLaudos
                     {
                         Headers = new HeaderDictionary(),
                         ContentType = "application/pdf"  
-                    };                   
+                    };
 
-                    // Chamada a Documents/UploadFile
-                    (var responseAsString, var isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
-                    
+                    // Chamada a Documents/UploadFile SE houver entrada correspondente na tabela
+                    string responseAsString = String.Empty;
+                    bool isSuccess = false;
+                    if (!unsuccessfulFilePathsList.Contains(filePath))
+                    {
+                        (responseAsString, isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
+                    }
+
                     // Tratamento pós-retorno da API
                     fileStream.Close();
                     if (isSuccess)
                     {
-                        string directoryPath = Path.GetDirectoryName(filePath)!; // Get the directory path
-                        string newFileName = "OK_" + fileName; // New file name with "OK_" prefix
-                        string newFilePath = Path.Combine(directoryPath, newFileName); // Combine path with new name
+                        string directoryPath = Path.GetDirectoryName(filePath)!;
+                        string newFileName = "OK_" + fileName;
+                        string newFilePath = Path.Combine(directoryPath, newFileName); 
                         try
                         {
-                            File.Move(filePath, newFilePath); // Rename the file on the disk
+                            File.Move(filePath, newFilePath);
                         }
                         catch (Exception ex)
                         {
-                            MessageBox.Show($"Error renaming file:\n {ex.Message}\n {ex.StackTrace}");
+                            MessageBox.Show($"Erro renomeando o arquivo:\n {ex.Message}\n {ex.StackTrace}");
                         }
                     }
                     else
                     {
-                        unsuccessfulFilePathsList.Add(filePath);
+                        if (!unsuccessfulFilePathsList.Contains(filePath)) // guarda horrível por causa da tabela incompleta que não foi prevista
+                        {
+                            unsuccessfulFilePathsList.Add(filePath);
+                        }
                     }
                     fileCounter++;
                 }
@@ -223,6 +232,12 @@ namespace ImportadorDeLaudos
         {
             // Check and update the button state whenever the ComboBox selection changes
             UpdateSendToOrbisButtonState();
+        }
+
+        private void ResetComboReportTypeState()
+        {
+            comboReportType.SelectedItem = null;
+            comboReportType.Text = "Selecione...";
         }
 
         private void UpdateSendToOrbisButtonState()

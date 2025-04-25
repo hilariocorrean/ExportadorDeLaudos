@@ -57,20 +57,20 @@ namespace ImportadorDeLaudos
                 Enable = 1,
                 Status = 1,
                 Value = modalidadePsiquiatria
-            };
-            var protocoloKeyword = new OrbisDocKeywordVersion
+            };            
+            var nomeKeyword = new OrbisDocKeywordVersion
             {
                 KeywordTypeOf = "2c79842d-51ae-45d2-b215-59c922312d1f",
                 Enable = 1,
                 Status = 1,
-                Value = protocolo
-            }; 
-            var nomeKeyword = new OrbisDocKeywordVersion
+                Value = nome
+            };
+            var protocoloKeyword = new OrbisDocKeywordVersion
             {
                 KeywordTypeOf = "29d181fb-3df8-4ef4-969b-19add378d179",
                 Enable = 1,
                 Status = 1,
-                Value = nome
+                Value = protocolo
             };
 
             keywordVersionList.Add(modalidadePsiquiatriaKeyword);
