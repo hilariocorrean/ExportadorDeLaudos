@@ -1,4 +1,5 @@
 using ImportadorDeLaudos.Contracts;
+using ImportadorDeLaudos.Models;
 using ImportadorDeLaudos.Models.Orbis;
 using ImportadorDeLaudos.Repository;
 using Microsoft.AspNetCore.Http;
@@ -129,16 +130,34 @@ namespace ImportadorDeLaudos
             {
                 if (fileCounter < (int)maxFilesAsDouble)
                 {
-                    var protocoloReqNr = double.Parse(filePath.Substring(filePath.Length - 10, 6));
-                    var relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
-                    if (relatorioAtualizado.ID == 0)
-                    {
-                        MessageBox.Show($"Algo deu errado. Verifique o ano do documento.");
-                        return;
-                    }
-                    string nomeCidadao = relatorioAtualizado.NOME!.ToUpper();
-
+                    double protocoloReqNr;
+                    string nomeCidadao;
+                    var relatorioAtualizado = new RelatorioAtualizado();
                     string fileName = Path.GetFileName(filePath);
+
+
+                    if (reportType == "PERÍCIA NO VIVO")
+                    {
+                        protocoloReqNr = double.Parse(fileName.Substring(0, fileName.Length - 4));
+                        relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
+                        if (relatorioAtualizado.ID == 0)
+                        {
+                            MessageBox.Show($"Algo deu errado. Verifique o ano do documento.");
+                            return;
+                        }
+                        nomeCidadao = relatorioAtualizado.NOME!.ToUpper();
+                    }
+                    else
+                    {
+                        nomeCidadao = fileName.Substring(0, fileName.Length - 4);
+                        relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndNome(yearAsDouble, nomeCidadao);
+                        if (relatorioAtualizado.ID == 0)
+                        {
+                            MessageBox.Show($"Algo deu errado. Verifique o ano do documento.");
+                            return;
+                        }
+                        protocoloReqNr = relatorioAtualizado.ANO;
+                    }
 
                     //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
                     var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
