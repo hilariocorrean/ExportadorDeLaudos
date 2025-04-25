@@ -50,7 +50,7 @@ namespace ImportadorDeLaudos
         // índices possíveis para o tipo documental em questão.
         // TODO: Adicionar à lista de argumentos a lista de keywords retornadas do GetKeywordsTypeOfsAsync, de modo que
         // KeywordTypeOf = Id e Value é associado a uma Label retornada.
-        private List<OrbisDocKeywordVersion> GetOrbisDocKeywordVersionsList(string modalidadeDeLaudos, double protocolo, string nome)
+        private List<OrbisDocKeywordVersion> GetOrbisDocKeywordVersionsList(string modalidadeDeLaudos, double protocolo, string nome, double ano)
         {
             var keywordVersionList = new List<OrbisDocKeywordVersion>();
 
@@ -75,10 +75,18 @@ namespace ImportadorDeLaudos
                 Status = 1,
                 Value = nome
             };
+            var anoKeyword = new OrbisDocKeywordVersion
+            {
+                KeywordTypeOf = "eff6e4cb-99ca-4909-a9c6-968786d30dbc",
+                Enable = 1,
+                Status = 1,
+                Value = ((int)ano).ToString()
+            };
 
             keywordVersionList.Add(modalidadeDeLaudosKeyword);
             keywordVersionList.Add(protocoloKeyword);
             keywordVersionList.Add(nomeKeyword);
+            keywordVersionList.Add(anoKeyword);
 
             return keywordVersionList;
         }
@@ -141,22 +149,16 @@ namespace ImportadorDeLaudos
                     {
                         protocoloReqNr = double.Parse(fileName.Substring(0, fileName.Length - 4));
                         relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
-                        if (relatorioAtualizado.ID == 0)
-                        {
-                            MessageBox.Show($"Algo deu errado. Verifique o ano do documento.");
-                            return;
-                        }
+                        // Caso exista entrada correspondente, o nome é buscado. Como é um índice opcional que a PCEPA sugeriu que
+                        // nem fosse usado para o laudo vivo, foda-se.
                         nomeCidadao = relatorioAtualizado.NOME!.ToUpper();
                     }
                     else
                     {
                         nomeCidadao = fileName.Substring(0, fileName.Length - 4);
                         relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndNome(yearAsDouble, nomeCidadao);
-                        if (relatorioAtualizado.ID == 0)
-                        {
-                            MessageBox.Show($"Algo deu errado. Verifique o ano do documento.");
-                            unsuccessfulFilePathsList.Add(filePath);
-                        }
+                        // Caso exista entrada correspondente, o número de protocolo é buscado. Como é um índice opcional que a PCEPA sugeriu que
+                        // nem fosse usado para o laudo morto, foda-se.
                         protocoloReqNr = relatorioAtualizado.PROTOCOLO_REQ_NR;
                     }
 
@@ -168,7 +170,7 @@ namespace ImportadorDeLaudos
                     var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
 
                     // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
-                    var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocoloReqNr, nomeCidadao);
+                    var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocoloReqNr, nomeCidadao, yearAsDouble);
                     var orbisDocVersions = GetOrbisDocVersionsList(fileName, typeOf, orbisDocKeywordVersions);
                     var orbisDocProperties = GetOrbisDocProperties(typeOf, orbisDocVersions);
 
@@ -183,10 +185,8 @@ namespace ImportadorDeLaudos
                     // Chamada a Documents/UploadFile SE houver entrada correspondente na tabela
                     string responseAsString = String.Empty;
                     bool isSuccess = false;
-                    if (!unsuccessfulFilePathsList.Contains(filePath))
-                    {
-                        (responseAsString, isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
-                    }
+                    (responseAsString, isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
+
 
                     // Tratamento pós-retorno da API
                     fileStream.Close();
@@ -206,10 +206,7 @@ namespace ImportadorDeLaudos
                     }
                     else
                     {
-                        if (!unsuccessfulFilePathsList.Contains(filePath)) // guarda horrível por causa da tabela incompleta que não foi prevista
-                        {
-                            unsuccessfulFilePathsList.Add(filePath);
-                        }
+                        unsuccessfulFilePathsList.Add(filePath);
                     }
                     fileCounter++;
                 }
@@ -230,7 +227,6 @@ namespace ImportadorDeLaudos
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Check and update the button state whenever the ComboBox selection changes
             UpdateSendToOrbisButtonState();
         }
 

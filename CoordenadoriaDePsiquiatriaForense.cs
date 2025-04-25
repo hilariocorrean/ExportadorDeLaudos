@@ -38,6 +38,7 @@ namespace ImportadorDeLaudos
                     listFilePaths.Items.Add(file);
                 }
 
+                ResetComboReportTypeState();
                 UpdateSendToOrbisButtonState();
             }
         }
@@ -72,7 +73,7 @@ namespace ImportadorDeLaudos
                 Status = 1,
                 Value = protocolo
             };
-
+           
             keywordVersionList.Add(modalidadePsiquiatriaKeyword);
             keywordVersionList.Add(protocoloKeyword);
             keywordVersionList.Add(nomeKeyword);
@@ -160,12 +161,12 @@ namespace ImportadorDeLaudos
                     fileStream.Close();
                     if (isSuccess)
                     {
-                        string directoryPath = Path.GetDirectoryName(filePath)!; // Get the directory path
-                        string newFileName = "OK_" + fileName; // New file name with "OK_" prefix
-                        string newFilePath = Path.Combine(directoryPath, newFileName); // Combine path with new name
+                        string directoryPath = Path.GetDirectoryName(filePath)!;
+                        string newFileName = "OK_" + fileName;
+                        string newFilePath = Path.Combine(directoryPath, newFileName);
                         try
                         {
-                            File.Move(filePath, newFilePath); // Rename the file on the disk
+                            File.Move(filePath, newFilePath);
                         }
                         catch (Exception ex)
                         {
@@ -195,8 +196,13 @@ namespace ImportadorDeLaudos
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            // Check and update the button state whenever the ComboBox selection changes
             UpdateSendToOrbisButtonState();
+        }
+
+        private void ResetComboReportTypeState()
+        {
+            comboReportType.SelectedItem = null;
+            comboReportType.Text = "Selecione...";
         }
 
         private void UpdateSendToOrbisButtonState()
