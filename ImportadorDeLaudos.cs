@@ -30,7 +30,8 @@ namespace ImportadorDeLaudos
 
         private void coordenadoriaPsiquiatriaForenseBtn_Click(object sender, EventArgs e)
         {
-
+            var window = new CoordenadoriaDePsiquiatriaForenseForm(_configuration, _httpClient);
+            window.ShowDialog();
         }
     }
 }
