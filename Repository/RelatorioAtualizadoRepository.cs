@@ -1,5 +1,6 @@
 ﻿using ImportadorDeLaudos.Contracts;
 using ImportadorDeLaudos.Models;
+using ImportadorDeLaudos.Utils;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -12,9 +13,8 @@ namespace ImportadorDeLaudos.Repository
 
         public RelatorioAtualizadoRepository(IConfiguration configuration)
         {
-            // Retrieve the connection string from the appsettings.json
             _connectionString = configuration.GetConnectionString("PCPALaudos")!;
-        }
+        }        
 
         public RelatorioAtualizado GetRelatorioAtualizadoByAnoAndProtocoloReqNr(double ANO, double PROTOCOLO_REQ_NR)
         {
@@ -62,7 +62,7 @@ namespace ImportadorDeLaudos.Repository
             }
             catch(Exception ex)
             {
-                MessageBox.Show(ex.StackTrace!.ToString());
+                WindowCopyableException.ShowException(ex);
                 return new RelatorioAtualizado();
             }
         }
@@ -115,6 +115,7 @@ namespace ImportadorDeLaudos.Repository
                 catch (Exception ex)
                 {
                     MessageBox.Show(ex.StackTrace!.ToString());
+                    Application.Exit();
                     return new RelatorioAtualizado();
                 }
             }
