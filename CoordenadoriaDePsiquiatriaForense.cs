@@ -1,6 +1,8 @@
 using ImportadorDeLaudos.Contracts;
+using ImportadorDeLaudos.Models;
 using ImportadorDeLaudos.Models.Orbis;
 using ImportadorDeLaudos.Repository;
+using ImportadorDeLaudos.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
@@ -114,84 +116,93 @@ namespace ImportadorDeLaudos
 
         private async void ButtonSendToOrbis_Click(object sender, EventArgs e)
         {
-            string reportType = comboReportType.SelectedItem!.ToString()!;
-            var maxFilesAsInt = (int)maxFiles.Value;
-
-            // Uma chamada para cada arquivo na lista. O ano é constante, o número máximo de arquivos é constante mas o número de
-            // protocolo precisa ser atualizado a cada registro dentro do loop.
-            var unsuccessfulFilePathsList = new List<string>();
-            var fileCounter = 0;
-
-            var processingRequestForm = new ProcessingRequestForm();
-            processingRequestForm.Show();
-
-            foreach (string filePath in listFilePaths.Items)
+            try
             {
-                if (fileCounter < maxFilesAsInt)
+                string reportType = comboReportType.SelectedItem!.ToString()!;
+                var maxFilesAsInt = (int)maxFiles.Value;
+
+                // Uma chamada para cada arquivo na lista. O ano é constante, o número máximo de arquivos é constante mas o número de
+                // protocolo precisa ser atualizado a cada registro dentro do loop.
+                var unsuccessfulFilePathsList = new List<string>();
+                var fileCounter = 0;
+
+                var processingRequestForm = new ProcessingRequestForm();
+                processingRequestForm.Show();
+
+                foreach (string filePath in listFilePaths.Items)
                 {
-                    string fileName = Path.GetFileName(filePath);
-
-                    string pdfName = fileName.Substring(0, fileName.Length - 4);
-                    (string protocolCode, string name) = (pdfName.Split("-")[0], pdfName.Split("-")[1]);
-
-                    //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
-                    var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
-                    // Por enquanto, vou pular o passo de levantar o índice (keyword) a partir do tipo documental (typeof).
-                    // Tipo documental: Coordenadoria de Psiquiatria Forense
-                    var typeOf = "a4386e0e-7582-419e-a97d-daa35bc1bc2e";
-                    var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
-
-                    // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
-                    var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocolCode, name);
-                    var orbisDocVersions = GetOrbisDocVersionsList(fileName, typeOf, orbisDocKeywordVersions);
-                    var orbisDocProperties = GetOrbisDocProperties(typeOf, orbisDocVersions);
-
-                    // Preparo do objeto do documento a ser enviado em Documents/UploadFile
-                    var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                    var document = new FormFile(fileStream, 0, fileStream.Length, "File", fileName) //VER SE O NOME ESPERADO É file MESMO
+                    if (fileCounter < maxFilesAsInt)
                     {
-                        Headers = new HeaderDictionary(),
-                        ContentType = "application/pdf"  
-                    };                   
+                        string fileName = Path.GetFileName(filePath);
 
-                    // Chamada a Documents/UploadFile
-                    (var responseAsString, var isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
-                    
-                    // Tratamento pós-retorno da API
-                    fileStream.Close();
-                    if (isSuccess)
-                    {
-                        string directoryPath = Path.GetDirectoryName(filePath)!;
-                        string newFileName = "OK_" + fileName;
-                        string newFilePath = Path.Combine(directoryPath, newFileName);
-                        try
+                        string pdfName = fileName.Substring(0, fileName.Length - 4);
+                        (string protocolCode, string name) = (pdfName.Split("-")[0], pdfName.Split("-")[1]);
+
+                        //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
+                        var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
+                        // Por enquanto, vou pular o passo de levantar o índice (keyword) a partir do tipo documental (typeof).
+                        // Tipo documental: Coordenadoria de Psiquiatria Forense
+                        var typeOf = "a4386e0e-7582-419e-a97d-daa35bc1bc2e";
+                        var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
+
+                        // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
+                        var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocolCode, name);
+                        var orbisDocVersions = GetOrbisDocVersionsList(fileName, typeOf, orbisDocKeywordVersions);
+                        var orbisDocProperties = GetOrbisDocProperties(typeOf, orbisDocVersions);
+
+                        // Preparo do objeto do documento a ser enviado em Documents/UploadFile
+                        var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                        var document = new FormFile(fileStream, 0, fileStream.Length, "File", fileName) //VER SE O NOME ESPERADO É file MESMO
                         {
-                            File.Move(filePath, newFilePath);
-                        }
-                        catch (Exception ex)
+                            Headers = new HeaderDictionary(),
+                            ContentType = "application/pdf"
+                        };
+
+                        // Chamada a Documents/UploadFile
+                        (var responseAsString, var isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
+
+                        // Tratamento pós-retorno da API
+                        fileStream.Close();
+                        if (isSuccess)
                         {
-                            MessageBox.Show($"Error renaming file:\n {ex.Message}\n {ex.StackTrace}");
+                            string directoryPath = Path.GetDirectoryName(filePath)!;
+                            string newFileName = "OK_" + fileName;
+                            string newFilePath = Path.Combine(directoryPath, newFileName);
+                            try
+                            {
+                                File.Move(filePath, newFilePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Erro ao renomear o arquivo:\n {ex.Message}\n {ex.StackTrace}");
+                                Application.Exit();
+                            }
                         }
+                        else
+                        {
+                            unsuccessfulFilePathsList.Add(filePath);
+                        }
+                        fileCounter++;
                     }
-                    else
-                    {
-                        unsuccessfulFilePathsList.Add(filePath);
-                    }
-                    fileCounter++;
                 }
-            }
 
-            while (fileCounter > 0)
-            {
-                listFilePaths.Items.RemoveAt(0); // Elimina os arquivos em ordem
-                fileCounter--;
-            }
-            foreach (string unsuccessfulFilePath in unsuccessfulFilePathsList)
-            {
-                listFilePaths.Items.Add(unsuccessfulFilePath);
-            }
+                while (fileCounter > 0)
+                {
+                    listFilePaths.Items.RemoveAt(0); // Elimina os arquivos em ordem
+                    fileCounter--;
+                }
+                foreach (string unsuccessfulFilePath in unsuccessfulFilePathsList)
+                {
+                    listFilePaths.Items.Add(unsuccessfulFilePath);
+                }
 
-            processingRequestForm.Close();
+                processingRequestForm.Close();
+            }
+            catch (Exception ex)
+            {
+                WindowCopyableException.ShowException(ex);
+                Application.Exit();
+            }
         }
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)

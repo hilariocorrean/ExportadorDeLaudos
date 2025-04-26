@@ -2,6 +2,7 @@ using ImportadorDeLaudos.Contracts;
 using ImportadorDeLaudos.Models;
 using ImportadorDeLaudos.Models.Orbis;
 using ImportadorDeLaudos.Repository;
+using ImportadorDeLaudos.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
@@ -123,106 +124,117 @@ namespace ImportadorDeLaudos
 
         private async void ButtonSendToOrbis_Click(object sender, EventArgs e)
         {
-            string reportType = comboReportType.SelectedItem!.ToString()!;
-            var yearAsDouble = (double)year.Value;
-            var maxFilesAsDouble = (double)maxFiles.Value;
-
-            // Uma chamada para cada arquivo na lista. O ano é constante, o número máximo de arquivos é constante mas o número de
-            // protocolo precisa ser atualizado a cada registro dentro do loop.
-            var unsuccessfulFilePathsList = new List<string>();
-            var fileCounter = 0;
-
-            var processingRequestForm = new ProcessingRequestForm();
-            processingRequestForm.Show();
-
-            foreach (string filePath in listFilePaths.Items)
+            try
             {
-                if (fileCounter < (int)maxFilesAsDouble)
+                string reportType = comboReportType.SelectedItem!.ToString()!;
+                var yearAsDouble = (double)year.Value;
+                var maxFilesAsDouble = (double)maxFiles.Value;
+
+                // Uma chamada para cada arquivo na lista. O ano é constante, o número máximo de arquivos é constante mas o número de
+                // protocolo precisa ser atualizado a cada registro dentro do loop.
+                var unsuccessfulFilePathsList = new List<string>();
+                var fileCounter = 0;
+
+                var processingRequestForm = new ProcessingRequestForm();
+                processingRequestForm.Show();
+
+                foreach (string filePath in listFilePaths.Items)
                 {
-                    double protocoloReqNr;
-                    string nomeCidadao;
-                    var relatorioAtualizado = new RelatorioAtualizado();
-                    string fileName = Path.GetFileName(filePath);
-
-
-                    if (reportType == "PERÍCIA NO VIVO")
+                    if (fileCounter < (int)maxFilesAsDouble)
                     {
-                        protocoloReqNr = double.Parse(fileName.Substring(0, fileName.Length - 4));
-                        relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
-                        // Caso exista entrada correspondente, o nome é buscado. Como é um índice opcional que a PCEPA sugeriu que
-                        // nem fosse usado para o laudo vivo, foda-se.
-                        nomeCidadao = relatorioAtualizado.NOME!.ToUpper();
-                    }
-                    else
-                    {
-                        nomeCidadao = fileName.Substring(0, fileName.Length - 4);
-                        relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndNome(yearAsDouble, nomeCidadao);
-                        // Caso exista entrada correspondente, o número de protocolo é buscado. Como é um índice opcional que a PCEPA sugeriu que
-                        // nem fosse usado para o laudo morto, foda-se.
-                        protocoloReqNr = relatorioAtualizado.PROTOCOLO_REQ_NR;
-                    }
-
-                    //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
-                    var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
-                    // Por enquanto, vou pular o passo de levantar o índice (keyword) a partir do tipo documental (typeof).
-                    // Tipo documental: Coordenação de perícias vivo ou morto
-                    var typeOf = "5d937fae-6564-491b-bc3b-4385bd2de9de";
-                    var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
-
-                    // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
-                    var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocoloReqNr, nomeCidadao, yearAsDouble);
-                    var orbisDocVersions = GetOrbisDocVersionsList(fileName, typeOf, orbisDocKeywordVersions);
-                    var orbisDocProperties = GetOrbisDocProperties(typeOf, orbisDocVersions);
-
-                    // Preparo do objeto do documento a ser enviado em Documents/UploadFile
-                    var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-                    var document = new FormFile(fileStream, 0, fileStream.Length, "File", fileName) //VER SE O NOME ESPERADO É file MESMO
-                    {
-                        Headers = new HeaderDictionary(),
-                        ContentType = "application/pdf"  
-                    };
-
-                    // Chamada a Documents/UploadFile SE houver entrada correspondente na tabela
-                    string responseAsString = String.Empty;
-                    bool isSuccess = false;
-                    (responseAsString, isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
+                        double protocoloReqNr;
+                        string nomeCidadao;
+                        var relatorioAtualizado = new RelatorioAtualizado();
+                        string fileName = Path.GetFileName(filePath);
 
 
-                    // Tratamento pós-retorno da API
-                    fileStream.Close();
-                    if (isSuccess)
-                    {
-                        string directoryPath = Path.GetDirectoryName(filePath)!;
-                        string newFileName = "OK_" + fileName;
-                        string newFilePath = Path.Combine(directoryPath, newFileName); 
-                        try
+                        if (reportType == "PERÍCIA NO VIVO")
                         {
-                            File.Move(filePath, newFilePath);
+                            protocoloReqNr = double.Parse(fileName.Substring(0, fileName.Length - 4));
+                            relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr(yearAsDouble, protocoloReqNr);
+                            // Caso exista entrada correspondente, o nome é buscado. Como é um índice opcional que a PCEPA sugeriu que
+                            // nem fosse usado para o laudo vivo, foda-se. FODA-SE O CARALHO, tinha esquecido que essa porra é um ponteiro,
+                            // então, se a entrada não bate, o método ToUpper() é chamado num ponteiro nulo.
+
+                            nomeCidadao = relatorioAtualizado.NOME is null ? string.Empty : relatorioAtualizado.NOME.ToUpper();
                         }
-                        catch (Exception ex)
+                        else
                         {
-                            MessageBox.Show($"Erro renomeando o arquivo:\n {ex.Message}\n {ex.StackTrace}");
+                            nomeCidadao = fileName.Substring(0, fileName.Length - 4);
+                            relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndNome(yearAsDouble, nomeCidadao);
+                            // Caso exista entrada correspondente, o número de protocolo é buscado. Como é um índice opcional que a PCEPA sugeriu que
+                            // nem fosse usado para o laudo morto, foda-se.
+                            protocoloReqNr = relatorioAtualizado.PROTOCOLO_REQ_NR;
                         }
+
+                        //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
+                        var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
+                        // Por enquanto, vou pular o passo de levantar o índice (keyword) a partir do tipo documental (typeof).
+                        // Tipo documental: Coordenação de perícias vivo ou morto
+                        var typeOf = "5d937fae-6564-491b-bc3b-4385bd2de9de";
+                        var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
+
+                        // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
+                        var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocoloReqNr, nomeCidadao, yearAsDouble);
+                        var orbisDocVersions = GetOrbisDocVersionsList(fileName, typeOf, orbisDocKeywordVersions);
+                        var orbisDocProperties = GetOrbisDocProperties(typeOf, orbisDocVersions);
+
+                        // Preparo do objeto do documento a ser enviado em Documents/UploadFile
+                        var fileStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+                        var document = new FormFile(fileStream, 0, fileStream.Length, "File", fileName) //VER SE O NOME ESPERADO É file MESMO
+                        {
+                            Headers = new HeaderDictionary(),
+                            ContentType = "application/pdf"
+                        };
+
+                        // Chamada a Documents/UploadFile SE houver entrada correspondente na tabela
+                        string responseAsString = String.Empty;
+                        bool isSuccess = false;
+                        (responseAsString, isSuccess) = await orbisRepository.UploadDocumentAsync(document, orbisDocProperties, token);
+
+
+                        // Tratamento pós-retorno da API
+                        fileStream.Close();
+                        if (isSuccess)
+                        {
+                            string directoryPath = Path.GetDirectoryName(filePath)!;
+                            string newFileName = "OK_" + fileName;
+                            string newFilePath = Path.Combine(directoryPath, newFileName);
+                            try
+                            {
+                                File.Move(filePath, newFilePath);
+                            }
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Erro renomeando o arquivo:\n {ex.Message}\n {ex.StackTrace}");
+                                Application.Exit();
+                            }
+                        }
+                        else
+                        {
+                            unsuccessfulFilePathsList.Add(filePath);
+                        }
+                        fileCounter++;
                     }
-                    else
-                    {
-                        unsuccessfulFilePathsList.Add(filePath);
-                    }
-                    fileCounter++;
                 }
-            }
 
-            while (fileCounter > 0)
-            {
-                listFilePaths.Items.RemoveAt(0); // Elimina os arquivos em ordem
-                fileCounter--;
-            }
-            foreach (string unsuccessfulFilePath in unsuccessfulFilePathsList)
-            {
-                listFilePaths.Items.Add(unsuccessfulFilePath);
-            }
+                while (fileCounter > 0)
+                {
+                    listFilePaths.Items.RemoveAt(0); // Elimina os arquivos em ordem
+                    fileCounter--;
+                }
+                foreach (string unsuccessfulFilePath in unsuccessfulFilePathsList)
+                {
+                    listFilePaths.Items.Add(unsuccessfulFilePath);
+                }
 
-            processingRequestForm.Close();
+                processingRequestForm.Close();
+            }
+            catch (Exception ex)
+            {
+                WindowCopyableException.ShowException(ex);
+                Application.Exit();
+            }
         }
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
