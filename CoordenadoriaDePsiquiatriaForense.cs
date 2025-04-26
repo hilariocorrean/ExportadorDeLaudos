@@ -38,7 +38,7 @@ namespace ImportadorDeLaudos
                     listFilePaths.Items.Add(file);
                 }
 
-                ResetComboReportTypeState();
+                // Usar o ResetComboReportTypeState() caso venha a ter outra modalidade
                 UpdateSendToOrbisButtonState();
             }
         }
