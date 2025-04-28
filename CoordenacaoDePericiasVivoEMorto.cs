@@ -158,7 +158,9 @@ namespace ImportadorDeLaudos
                             // então, se a entrada não bate, o método ToUpper() é chamado num ponteiro nulo.
 
                             nomeCidadao = relatorioAtualizado.NOME is null ? string.Empty : relatorioAtualizado.NOME.ToUpper();
-                            protocolo = relatorioAtualizado.PROTOCOLO is null ? protocoloReqNr.ToString().PadLeft(6, '0') : relatorioAtualizado.PROTOCOLO;
+                            // Não havendo registro, presume que é da regional de Belém.
+                            var protocoloGerado = year.Value.ToString() + ".01." + protocoloReqNr.ToString().PadLeft(6, '0');
+                            protocolo = relatorioAtualizado.PROTOCOLO is null ? protocoloGerado : relatorioAtualizado.PROTOCOLO;
                         }
                         else
                         {
@@ -167,7 +169,9 @@ namespace ImportadorDeLaudos
                             // Caso exista entrada correspondente, o número de protocolo é buscado. Como é um índice opcional que a PCEPA sugeriu que
                             // nem fosse usado para o laudo morto, foda-se.
                             protocoloReqNr = relatorioAtualizado.PROTOCOLO_REQ_NR;
-                            protocolo = relatorioAtualizado.PROTOCOLO is null ? protocoloReqNr.ToString().PadLeft(6, '0') : relatorioAtualizado.PROTOCOLO;
+                            // Não havendo registro, presume que é da regional de Belém.
+                            var protocoloGerado = year.Value.ToString() + ".01." + protocoloReqNr.ToString().PadLeft(6, '0');
+                            protocolo = relatorioAtualizado.PROTOCOLO is null ? protocoloGerado : relatorioAtualizado.PROTOCOLO;
                         }
 
                         //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
