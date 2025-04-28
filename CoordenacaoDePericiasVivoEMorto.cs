@@ -51,7 +51,7 @@ namespace ImportadorDeLaudos
         // índices possíveis para o tipo documental em questão.
         // TODO: Adicionar à lista de argumentos a lista de keywords retornadas do GetKeywordsTypeOfsAsync, de modo que
         // KeywordTypeOf = Id e Value é associado a uma Label retornada.
-        private List<OrbisDocKeywordVersion> GetOrbisDocKeywordVersionsList(string modalidadeDeLaudos, double protocolo, string nome, double ano)
+        private List<OrbisDocKeywordVersion> GetOrbisDocKeywordVersionsList(string modalidadeDeLaudos, string protocolo, string nome, double ano)
         {
             var keywordVersionList = new List<OrbisDocKeywordVersion>();
 
@@ -67,7 +67,7 @@ namespace ImportadorDeLaudos
                 KeywordTypeOf = "a0f59e97-39ab-4b8d-92b7-368b88ae38de",
                 Enable = 1,
                 Status = 1,
-                Value = ((int)protocolo).ToString() // pode ser a origem do problema
+                Value = protocolo
             };
             var nomeKeyword = new OrbisDocKeywordVersion
             {
@@ -142,8 +142,9 @@ namespace ImportadorDeLaudos
                 {
                     if (fileCounter < (int)maxFilesAsDouble)
                     {
-                        double protocoloReqNr;
+                        double protocoloReqNr; // O QUE É USADO PARA ACHAR NO BANCO
                         string nomeCidadao;
+                        string protocolo; // O QUE REALMENTE É ENVIADO
                         var relatorioAtualizado = new RelatorioAtualizado();
                         string fileName = Path.GetFileName(filePath);
 
@@ -157,6 +158,7 @@ namespace ImportadorDeLaudos
                             // então, se a entrada não bate, o método ToUpper() é chamado num ponteiro nulo.
 
                             nomeCidadao = relatorioAtualizado.NOME is null ? string.Empty : relatorioAtualizado.NOME.ToUpper();
+                            protocolo = relatorioAtualizado.PROTOCOLO is null ? protocoloReqNr.ToString().PadLeft(6, '0') : relatorioAtualizado.PROTOCOLO;
                         }
                         else
                         {
@@ -165,6 +167,7 @@ namespace ImportadorDeLaudos
                             // Caso exista entrada correspondente, o número de protocolo é buscado. Como é um índice opcional que a PCEPA sugeriu que
                             // nem fosse usado para o laudo morto, foda-se.
                             protocoloReqNr = relatorioAtualizado.PROTOCOLO_REQ_NR;
+                            protocolo = relatorioAtualizado.PROTOCOLO is null ? protocoloReqNr.ToString().PadLeft(6, '0') : relatorioAtualizado.PROTOCOLO;
                         }
 
                         //MessageBox.Show($"Tipo de laudo: {reportType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
@@ -175,7 +178,7 @@ namespace ImportadorDeLaudos
                         var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
 
                         // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
-                        var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocoloReqNr, nomeCidadao, yearAsDouble);
+                        var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocolo, nomeCidadao, yearAsDouble);
                         var orbisDocVersions = GetOrbisDocVersionsList(fileName, typeOf, orbisDocKeywordVersions);
                         var orbisDocProperties = GetOrbisDocProperties(typeOf, orbisDocVersions);
 
