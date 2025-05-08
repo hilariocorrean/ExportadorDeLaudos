@@ -6,6 +6,7 @@ using ImportadorDeLaudos.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
 
 namespace ImportadorDeLaudos
 {
@@ -31,13 +32,19 @@ namespace ImportadorDeLaudos
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 string selectedFolder = folderBrowserDialog.SelectedPath;
+                listFilePaths.Items.Clear();
 
-                listFilePaths.Items.Clear(); 
-                List<string> files = Directory.GetFiles(selectedFolder, "*.*-*.pdf", SearchOption.AllDirectories)
-                                          .Where(s => !s.Contains("OK_")).ToList();
-                foreach (var file in files)
+                List<string> filePaths = Directory.GetFiles(selectedFolder, "*.pdf", SearchOption.AllDirectories).ToList();
+                // LÛgica de pattern matching para eliminar os que fogem do padr„o
+                Regex namePattern = new Regex(@"^\d{3}\.\d{4}-[a-zA-Z·¡È…ÌÕÛ”˙⁄‡¿Ë»ÏÃÚ“˘Ÿ‚¬Í ÓŒÙ‘˚€„√ı’Á«\s]+\.pdf$", RegexOptions.Compiled);
+                foreach (var filePath in filePaths)
                 {
-                    listFilePaths.Items.Add(file);
+                    var fileName = Path.GetFileName(filePath);
+
+                    if (namePattern.IsMatch(fileName))
+                    {
+                        listFilePaths.Items.Add(filePath);
+                    }
                 }
 
                 // Usar o ResetComboReportTypeState() caso venha a ter outra modalidade
