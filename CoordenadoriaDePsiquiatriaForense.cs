@@ -220,14 +220,12 @@ namespace ImportadorDeLaudos
         private void ResetComboReportTypeState()
         {
             comboReportType.SelectedItem = null;
-            comboReportType.Text = "Selecione...";
+            comboReportType.Text = "Selecionar...";
         }
 
         private void UpdateSendToOrbisButtonState()
         {
-            // Enable the button only if both conditions are met:
-            // 1. The list is not empty
-            // 2. The ComboBox has a selected item
+            // Libera o botão de envio se houver ao menos um arquivo na lista e se tiver um tipo definido de laudo
             buttonSendToOrbis.Enabled = listFilePaths.Items.Count > 0 && comboReportType.SelectedIndex != -1; //mudar o segundo pra 'is not null'?
         }
     }

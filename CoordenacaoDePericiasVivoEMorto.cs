@@ -6,6 +6,7 @@ using ImportadorDeLaudos.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Configuration;
+using System.Text.RegularExpressions;
 
 namespace ImportadorDeLaudos
 {
@@ -33,13 +34,21 @@ namespace ImportadorDeLaudos
             if (folderBrowserDialog.ShowDialog() == DialogResult.OK)
             {
                 string selectedFolder = folderBrowserDialog.SelectedPath;
-
                 listFilePaths.Items.Clear(); 
-                List<string> files = Directory.GetFiles(selectedFolder, "*.pdf", SearchOption.AllDirectories)
-                                          .Where(s => !s.Contains("OK_")).ToList();
-                foreach (var file in files)
+
+                List<string> filePaths = Directory.GetFiles(selectedFolder, "*.pdf", SearchOption.AllDirectories).ToList();
+                // Lógica de pattern matching para eliminar os que fogem do padrão
+                Regex laudoVivoNamePattern = new Regex(@"^[0-9]{6}\.pdf$", RegexOptions.Compiled);
+                Regex laudoMortoNamePattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ\s]+\.pdf$", RegexOptions.Compiled);
+                
+                foreach (var filePath in filePaths)
                 {
-                    listFilePaths.Items.Add(file);
+                    var fileName = Path.GetFileName(filePath);
+
+                    if (laudoVivoNamePattern.IsMatch(fileName) || laudoMortoNamePattern.IsMatch(fileName))
+                    {
+                        listFilePaths.Items.Add(filePath);
+                    }
                 }
 
                 ResetComboReportTypeState();
@@ -252,14 +261,12 @@ namespace ImportadorDeLaudos
         private void ResetComboReportTypeState()
         {
             comboReportType.SelectedItem = null;
-            comboReportType.Text = "Selecione...";
+            comboReportType.Text = "Selecionar...";
         }
 
         private void UpdateSendToOrbisButtonState()
         {
-            // Enable the button only if both conditions are met:
-            // 1. The list is not empty
-            // 2. The ComboBox has a selected item
+            // Libera o botão de envio se houver ao menos um arquivo na lista e se tiver um tipo definido de laudo
             buttonSendToOrbis.Enabled = listFilePaths.Items.Count > 0 && comboReportType.SelectedIndex != -1; //mudar o segundo pra 'is not null'?
         }
     }
