@@ -39,7 +39,7 @@
             coordenacaoPericiasVivoMortoBtn.Name = "coordenacaoPericiasVivoMortoBtn";
             coordenacaoPericiasVivoMortoBtn.Size = new Size(333, 32);
             coordenacaoPericiasVivoMortoBtn.TabIndex = 0;
-            coordenacaoPericiasVivoMortoBtn.Text = "Coordenação de perícias no vivo e no morto";
+            coordenacaoPericiasVivoMortoBtn.Text = "Coordenação de Perícias no Vivo e no Morto";
             coordenacaoPericiasVivoMortoBtn.UseVisualStyleBackColor = true;
             coordenacaoPericiasVivoMortoBtn.Click += coordenacaoPericiasVivoMortoBtn_Click;
             // 
