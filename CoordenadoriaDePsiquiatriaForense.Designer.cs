@@ -73,13 +73,16 @@ namespace ImportadorDeLaudos
             // 
             // comboReportType
             // 
-            comboReportType.Enabled = false;
-            comboReportType.Items.AddRange(new object[] { "LAUDOS" }); // se não, tentar MODALIDADE PSIQUIATRIA
+            comboReportType.Items.AddRange(new object[] { "LAUDOS PSIQUIÁTRICO LEGAL", 
+                                                          "LAUDOS MARABÁ", 
+                                                          "LAUDOS PENDENTES DOS MÉDICOS", 
+                                                          "LAUDOS PERICIA.NET",
+                                                          "LAUDOS SANTARÉM"  });
             comboReportType.Location = new Point(183, 403);
             comboReportType.Name = "comboReportType";
             comboReportType.Size = new Size(271, 28);
             comboReportType.TabIndex = 2;
-            comboReportType.Text = "LAUDOS";
+            comboReportType.Text = "Selecionar...";
             comboReportType.SelectedIndexChanged += ComboReportType_SelectedIndexChanged;
             // 
             // maxFiles
