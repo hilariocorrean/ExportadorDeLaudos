@@ -169,12 +169,13 @@ namespace ImportadorDeLaudos
                         string fileNameWithoutExtension = Path.GetFileNameWithoutExtension(filePath);
                         string noLaudo;
 
-                        switch(reportType)
+                        switch(comboReportType.SelectedItem!.ToString()!) //Não pode ser por reportType porque ele é alterado no laudo morto sipl
                         {
                             case "PERÍCIA NO VIVO":
                                 // Caso exista entrada correspondente, o nome é buscado. Como é um índice opcional que a PCEPA sugeriu que
                                 // nem fosse usado para o laudo vivo, foda-se. FODA-SE O CARALHO, tinha esquecido que essa porra é um ponteiro,
                                 // então, se a entrada não bate, o método ToUpper() é chamado num ponteiro nulo.
+                                reportType = comboReportType.SelectedItem.ToString()!; // Horrível, mas é um jeito suficientemente simples
                                 protocoloReqNr = double.Parse(fileNameWithoutExtension);
                                 relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndProtocoloReqNr((double)yearAsNullableDouble!, protocoloReqNr);
                                 nomeCidadao = relatorioAtualizado.NOME is null ? string.Empty : relatorioAtualizado.NOME.ToUpper();
@@ -186,6 +187,7 @@ namespace ImportadorDeLaudos
                             case "PERÍCIA NO MORTO":
                                 // Caso exista entrada correspondente, o número de protocolo é buscado. Como é um índice opcional que a PCEPA sugeriu que
                                 // nem fosse usado para o laudo morto, foda-se.
+                                reportType = comboReportType.SelectedItem.ToString()!; // Horrível, mas é um jeito suficientemente simples
                                 nomeCidadao = fileNameWithoutExtension.ToUpper();
                                 relatorioAtualizado = relatorioAtualizadoRepository.GetRelatorioAtualizadoByAnoAndNome((double)yearAsNullableDouble!, nomeCidadao);                                
                                 protocoloReqNr = relatorioAtualizado.PROTOCOLO_REQ_NR;
@@ -197,6 +199,7 @@ namespace ImportadorDeLaudos
                             case "LAUDOS SIPL":
                                 // Caso dos Laudos.Sipl. São laudos de perícia no vivo cujo nome é no formato
                                 // <ano>-<nro de laudo>=<primeiro nome da pessoa>.pdf
+                                reportType = comboReportType.SelectedItem.ToString()!; // Horrível, mas é um jeito suficientemente simples
                                 var nameTokens = fileNameWithoutExtension.Split(['-', '=']);
                                 nomeCidadao = nameTokens[2].ToUpper();
                                 protocolo = String.Empty;
@@ -206,12 +209,12 @@ namespace ImportadorDeLaudos
                                 // Caso dos laudos mortos da pasta Sipl. Ao contrário dos vivos, não precisa de um tipo adicional.
                                 // Em compensação, não pode usar o lookup na tabela e nem tem número de protocolo associado.
                                 // Além disso, a organização não é por ano, e o ano deve ser ignorado/mandado em branco.
+                                // A modalidade PERÍCIA NO MORTO (SIPL) só existe no programa, a modalidade no orbis é a mesma dos demais laudos mortos.
+                                reportType = "PERÍCIA NO MORTO"; // Horrível, mas é um jeito suficientemente simples
                                 nomeCidadao = fileNameWithoutExtension.ToUpper();
                                 protocolo = String.Empty;
                                 noLaudo = String.Empty;
                                 yearAsNullableDouble = null; // Gambiarra pro ano ficar em branco tendo que alterar o mínimo possível.
-                                // A modalidade PERÍCIA NO MORTO (SIPL) só existe no programa, a modalidade no orbis é a mesma dos demais laudos mortos.
-                                reportType = "PERÍCIA NO MORTO";
                                 break;
                         }                        
 
@@ -275,6 +278,10 @@ namespace ImportadorDeLaudos
                     listFilePaths.Items.Add(unsuccessfulFilePath);
                 }
 
+                if (listFilePaths.Items.Count == 0)
+                {
+                    UpdateSendToOrbisButtonState();
+                }
                 processingRequestForm.Close();
             }
             catch (Exception ex)
@@ -286,7 +293,8 @@ namespace ImportadorDeLaudos
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (comboReportType.SelectedItem!.ToString() == "PERÍCIA NO MORTO (SIPL)")
+            
+            if (comboReportType.SelectedItem is not null && comboReportType.SelectedItem.ToString() == "PERÍCIA NO MORTO (SIPL)")
             {
                 labelYear.Enabled = false;
                 year.Enabled = false;

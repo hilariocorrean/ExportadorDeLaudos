@@ -205,6 +205,10 @@ namespace ImportadorDeLaudos
                     listFilePaths.Items.Add(unsuccessfulFilePath);
                 }
 
+                if (listFilePaths.Items.Count == 0)
+                {
+                    UpdateSendToOrbisButtonState();
+                }
                 processingRequestForm.Close();
             }
             catch (Exception ex)
