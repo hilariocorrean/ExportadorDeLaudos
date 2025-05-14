@@ -36,7 +36,9 @@ namespace ImportadorDeLaudos
 
                 List<string> filePaths = Directory.GetFiles(selectedFolder, "*.pdf", SearchOption.AllDirectories).ToList();
                 // Lógica de pattern matching para eliminar os que fogem do padrão
-                Regex namePattern = new Regex(@"^\d{3}\.\d{4}-[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ\s]+\.pdf$", RegexOptions.Compiled);
+                // Adição de apóstrofo (D'artagnan e Sant'anna me pegaram desprevenido) e ponto (há arquivos com nomes abreviados)
+                // Mudei de ideia. Deixa os com . para avaliação manual. 
+                Regex namePattern = new Regex(@"^\d+\.\d{4}-[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]+\.pdf$", RegexOptions.Compiled);
                 foreach (var filePath in filePaths)
                 {
                     var fileName = Path.GetFileName(filePath);
@@ -150,7 +152,7 @@ namespace ImportadorDeLaudos
                         // Por enquanto, vou pular o passo de levantar o índice (keyword) a partir do tipo documental (typeof).
                         // Tipo documental: Coordenadoria de Psiquiatria Forense
                         var typeOf = "a4386e0e-7582-419e-a97d-daa35bc1bc2e";
-                        var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
+                        //var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
 
                         // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
                         var orbisDocKeywordVersions = GetOrbisDocKeywordVersionsList(reportType, protocolCode, name);
