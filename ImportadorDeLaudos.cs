@@ -33,5 +33,11 @@ namespace ImportadorDeLaudos
             var window = new CoordenadoriaDePsiquiatriaForenseForm(_configuration, _httpClient);
             window.ShowDialog();
         }
+
+        private void coordenadoriaAdministracaoServidoresBtn_Click(object sender, EventArgs e)
+        {
+            var window = new CoordenadoriaDeAdministracaoServidoresForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
     }
 }

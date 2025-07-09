@@ -18,6 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="CoordenadoriaDeAdministracaoServidores.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="CoordenadoriaDePsiquiatriaForense.cs">
       <SubType>Form</SubType>
     </Compile>

@@ -31,6 +31,7 @@
             coordenacaoPericiasVivoMortoBtn = new Button();
             coordenadoriaPsiquiatriaForenseBtn = new Button();
             tipoDocumentalLabel = new Label();
+            coordenadoriaDeAdministracaoServidoresBtn = new Button();
             SuspendLayout();
             // 
             // coordenacaoPericiasVivoMortoBtn
@@ -62,11 +63,22 @@
             tipoDocumentalLabel.TabIndex = 2;
             tipoDocumentalLabel.Text = "Por favor, selecione o Tipo Documental: ";
             // 
+            // coordenadoriaDeAdministracaoServidoresBtn
+            // 
+            coordenadoriaDeAdministracaoServidoresBtn.Location = new Point(12, 121);
+            coordenadoriaDeAdministracaoServidoresBtn.Name = "coordenadoriaDeAdministracaoServidoresBtn";
+            coordenadoriaDeAdministracaoServidoresBtn.Size = new Size(333, 29);
+            coordenadoriaDeAdministracaoServidoresBtn.TabIndex = 3;
+            coordenadoriaDeAdministracaoServidoresBtn.Text = "COAD Servidores";
+            coordenadoriaDeAdministracaoServidoresBtn.UseVisualStyleBackColor = true;
+            coordenadoriaDeAdministracaoServidoresBtn.Click += coordenadoriaAdministracaoServidoresBtn_Click;
+            // 
             // ImportadorDeLaudosForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(603, 329);
+            Controls.Add(coordenadoriaDeAdministracaoServidoresBtn);
             Controls.Add(tipoDocumentalLabel);
             Controls.Add(coordenadoriaPsiquiatriaForenseBtn);
             Controls.Add(coordenacaoPericiasVivoMortoBtn);
@@ -81,5 +93,6 @@
         private Button coordenacaoPericiasVivoMortoBtn;
         private Button coordenadoriaPsiquiatriaForenseBtn;
         private Label tipoDocumentalLabel;
+        private Button coordenadoriaDeAdministracaoServidoresBtn;
     }
 }
