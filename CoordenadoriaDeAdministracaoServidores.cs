@@ -38,12 +38,29 @@ namespace ImportadorDeLaudos
                 // Lógica de pattern matching para eliminar os que fogem do padrão
                 // Nomes representados como qualquer sequência de letras + acentos padrão + apóstrofo e espaço em branco.
                 // CPF esperado como uma sequência simples de 11 dígitos. Arquivos com outros números serão ignorados.
-                Regex namePattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\s\d{11}\.pdf$", RegexOptions.Compiled);
+                // Espera-se que não existam arquivos com apenas nome e lixo, pois o lixo tem grandes chances de ser indistinguível.
+                Regex nameAndCpfPattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\s\d{11}\.pdf$", RegexOptions.Compiled);
+                Regex namePattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\.pdf$", RegexOptions.Compiled);
+                Regex nameCpfAndTimestampPattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\s\d{28}\.pdf$", RegexOptions.Compiled);
+                Regex nameAndTimestampPattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\d{17}\.pdf$", RegexOptions.Compiled);
+
                 foreach (var filePath in filePaths)
                 {
                     var fileName = Path.GetFileName(filePath);
 
-                    if (namePattern.IsMatch(fileName))
+                    if (nameAndCpfPattern.IsMatch(fileName))
+                    {
+                        listFilePaths.Items.Add(filePath);
+                    }
+                    else if (namePattern.IsMatch(fileName))
+                    {
+                        listFilePaths.Items.Add(filePath);
+                    }
+                    else if (nameCpfAndTimestampPattern.IsMatch(fileName))
+                    {
+                        listFilePaths.Items.Add(filePath);
+                    }
+                    else if (nameAndTimestampPattern.IsMatch(fileName))
                     {
                         listFilePaths.Items.Add(filePath);
                     }
@@ -161,8 +178,33 @@ namespace ImportadorDeLaudos
                         string fileName = Path.GetFileName(filePath);
                         string pdfName = Path.GetFileNameWithoutExtension(filePath);
 
-                        string cpf = pdfName.Split(' ').LastOrDefault()!;
-                        string name = pdfName.Replace(cpf, string.Empty).TrimEnd();
+                        Regex nameAndCpfPattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\s\d{11}\.pdf$", RegexOptions.Compiled);
+                        Regex namePattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\.pdf$", RegexOptions.Compiled);
+                        Regex nameCpfAndTimestampPattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\s\d{28}\.pdf$", RegexOptions.Compiled);
+                        Regex nameAndTimestampPattern = new Regex(@"^[a-zA-ZáÁéÉíÍóÓúÚàÀèÈìÌòÒùÙâÂêÊîÎôÔûÛãÃõÕçÇ'\s]*\d{17}\.pdf$", RegexOptions.Compiled);
+                        
+                        string cpf, name;
+                        if (nameAndCpfPattern.IsMatch(fileName))
+                        {
+                            cpf = pdfName.Split(' ').LastOrDefault()!;
+                            name = pdfName.Replace(cpf, string.Empty).TrimEnd();
+                        }
+                        else if (namePattern.IsMatch(fileName))
+                        {
+                            cpf = string.Empty;
+                            name = pdfName.TrimEnd();
+                        }
+                        else if (nameCpfAndTimestampPattern.IsMatch(fileName))
+                        {
+                            string cpfAndTimestamp = pdfName.Split(' ').LastOrDefault()!;
+                            cpf = cpfAndTimestamp.Substring(0, 11);
+                            name = pdfName.Replace(cpfAndTimestamp, string.Empty).TrimEnd();
+                        }
+                        else // if(nameAndTimestampPattern.IsMatch(fileName))
+                        {
+                            cpf = string.Empty;
+                            name = pdfName.Substring(0, pdfName.Length - 17);
+                        }
 
                         //MessageBox.Show($"Tipo de laudo: {docType}\nAno: {yearAsDouble}\nNúmero máximo de arquivos: {maxFilesAsDouble}\nProcessando a requisição...");
                         var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
