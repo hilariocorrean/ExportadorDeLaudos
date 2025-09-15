@@ -81,7 +81,7 @@ namespace ImportadorDeLaudos
             comboReportType.Items.AddRange(new object[] { "PERÍCIA NO MORTO", "PERÍCIA NO MORTO (SIPL)", "PERÍCIA NO MORTO (SEM ANO)" });
             comboReportType.Location = new Point(186, 396);
             comboReportType.Name = "comboReportType";
-            comboReportType.Size = new Size(216, 28);
+            comboReportType.Size = new Size(277, 28);
             comboReportType.TabIndex = 2;
             comboReportType.Text = "Selecionar...";
             comboReportType.SelectedIndexChanged += ComboReportType_SelectedIndexChanged;
@@ -91,7 +91,7 @@ namespace ImportadorDeLaudos
             year.Location = new Point(186, 426);
             year.Maximum = new decimal(new int[] { 2125, 0, 0, 0 });
             year.Name = "year";
-            year.Size = new Size(215, 27);
+            year.Size = new Size(276, 27);
             year.TabIndex = 3;
             year.Value = new decimal(new int[] { 2025, 0, 0, 0 });
             // 
@@ -101,7 +101,7 @@ namespace ImportadorDeLaudos
             maxFiles.Maximum = new decimal(new int[] { int.MaxValue, 0, 0, 0 });
             maxFiles.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
             maxFiles.Name = "maxFiles";
-            maxFiles.Size = new Size(215, 27);
+            maxFiles.Size = new Size(276, 27);
             maxFiles.TabIndex = 4;
             maxFiles.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
@@ -142,7 +142,7 @@ namespace ImportadorDeLaudos
             labelMaxFiles.TabIndex = 8;
             labelMaxFiles.Text = "Nº máximo de arquivos";
             // 
-            // CoordenacaoDePericiasVivoEMortoForm
+            // CoordenacaoDePericiasNoMortoLaudosForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;

@@ -278,8 +278,8 @@ namespace ImportadorDeLaudos
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
-            if (comboReportType.SelectedItem is not null && comboReportType.SelectedItem.ToString() == "PERÍCIA NO MORTO (SIPL)")
+
+            if ((comboReportType.SelectedItem is not null) && comboReportType.SelectedItem.ToString() == "PERÍCIA NO MORTO (SIPL)" || comboReportType.SelectedItem!.ToString() == "PERÍCIA NO MORTO (SEM ANO)")
             {
                 labelYear.Enabled = false;
                 year.Enabled = false;

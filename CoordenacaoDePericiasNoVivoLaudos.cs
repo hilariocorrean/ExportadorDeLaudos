@@ -283,19 +283,7 @@ namespace ImportadorDeLaudos
         }
 
         private void ComboReportType_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            
-            if (comboReportType.SelectedItem is not null && comboReportType.SelectedItem.ToString() == "PERÍCIA NO MORTO (SIPL)")
-            {
-                labelYear.Enabled = false;
-                year.Enabled = false;
-            }
-            else
-            {
-                labelYear.Enabled = true;
-                year.Enabled = true;
-            }
-
+        {         
             UpdateSendToOrbisButtonState();
         }
 
