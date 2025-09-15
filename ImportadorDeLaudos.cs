@@ -39,5 +39,11 @@ namespace ImportadorDeLaudos
             var window = new CoordenadoriaDeAdministracaoServidoresForm(_configuration, _httpClient);
             window.ShowDialog();
         }
+
+        private void coordenacaoPericiasMortoLaudosBtn_Click(object sender, EventArgs e)
+        {
+            var window = new CoordenacaoDePericiasNoMortoLaudosForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
     }
 }
