@@ -45,5 +45,11 @@ namespace ImportadorDeLaudos
             var window = new CoordenacaoDePericiasNoMortoLaudosForm(_configuration, _httpClient);
             window.ShowDialog();
         }
+
+        private void coordenacaoPericiasVivoLaudosBtn_Click(object sender, EventArgs e)
+        {
+            var window = new CoordenacaoDePericiasNoVivoLaudosForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
     }
 }

@@ -21,6 +21,9 @@
     <Compile Update="CoordenacaoDePericiasNoMortoLaudos.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="CoordenacaoDePericiasNoVivoLaudos.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="CoordenadoriaDeAdministracaoServidores.cs">
       <SubType>Form</SubType>
     </Compile>

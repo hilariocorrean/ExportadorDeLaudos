@@ -33,6 +33,7 @@
             tipoDocumentalLabel = new Label();
             coordenadoriaDeAdministracaoServidoresBtn = new Button();
             coordenacaoPericiasMortoLaudosBtn = new Button();
+            coordenacaoPericiasVivoLaudosBtn = new Button();
             SuspendLayout();
             // 
             // coordenacaoPericiasVivoMortoBtn
@@ -44,6 +45,7 @@
             coordenacaoPericiasVivoMortoBtn.Text = "Coordenação de Perícias no Vivo e no Morto";
             coordenacaoPericiasVivoMortoBtn.UseVisualStyleBackColor = true;
             coordenacaoPericiasVivoMortoBtn.Click += coordenacaoPericiasVivoMortoBtn_Click;
+            coordenacaoPericiasVivoMortoBtn.Enabled = false;
             // 
             // coordenadoriaPsiquiatriaForenseBtn
             // 
@@ -84,11 +86,22 @@
             coordenacaoPericiasMortoLaudosBtn.UseVisualStyleBackColor = true;
             coordenacaoPericiasMortoLaudosBtn.Click += coordenacaoPericiasMortoLaudosBtn_Click;
             // 
+            // coordenacaoPericiasVivoLaudosBtn
+            // 
+            coordenacaoPericiasVivoLaudosBtn.Location = new Point(12, 194);
+            coordenacaoPericiasVivoLaudosBtn.Name = "button1";
+            coordenacaoPericiasVivoLaudosBtn.Size = new Size(387, 32);
+            coordenacaoPericiasVivoLaudosBtn.TabIndex = 5;
+            coordenacaoPericiasVivoLaudosBtn.Text = "Coordenação de Perícias no Vivo (CPV) Laudos";
+            coordenacaoPericiasVivoLaudosBtn.UseVisualStyleBackColor = true;
+            coordenacaoPericiasVivoLaudosBtn.Click += coordenacaoPericiasVivoLaudosBtn_Click;
+            // 
             // ImportadorDeLaudosForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(603, 329);
+            Controls.Add(coordenacaoPericiasVivoLaudosBtn);
             Controls.Add(coordenacaoPericiasMortoLaudosBtn);
             Controls.Add(coordenadoriaDeAdministracaoServidoresBtn);
             Controls.Add(tipoDocumentalLabel);
@@ -107,5 +120,6 @@
         private Label tipoDocumentalLabel;
         private Button coordenadoriaDeAdministracaoServidoresBtn;
         private Button coordenacaoPericiasMortoLaudosBtn;
+        private Button coordenacaoPericiasVivoLaudosBtn;
     }
 }
