@@ -21,6 +21,21 @@
     <Compile Update="CoordenacaoDePericiasNoMortoLaudos.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="PCEPACastanhalIMOLLaudosMedicina.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PCEPACastanhalIMOLDraRosaBarros.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PCEPACastanhalIMOLDigitalizacoes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PCEPACastanhalICLaboratorio.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PCEPACastanhalICGeral.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="CoordenacaoDePericiasNoVivoLaudos.cs">
       <SubType>Form</SubType>
     </Compile>

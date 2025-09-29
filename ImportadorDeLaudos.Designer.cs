@@ -34,10 +34,16 @@
             coordenadoriaDeAdministracaoServidoresBtn = new Button();
             coordenacaoPericiasMortoLaudosBtn = new Button();
             coordenacaoPericiasVivoLaudosBtn = new Button();
+            pcepaCastanhalICGeralBtn = new Button();
+            pcepaCastanhalICLaboratorioBtn = new Button();
+            pcepaCastanhalIMOLDigitalizacoesBtn = new Button();
+            pcepaCastanhalIMOLDraRosaBarrosBtn = new Button();
+            pcepaCastanhalIMOLLaudosMedicinaBtn = new Button();
             SuspendLayout();
             // 
             // coordenacaoPericiasVivoMortoBtn
             // 
+            coordenacaoPericiasVivoMortoBtn.Enabled = false;
             coordenacaoPericiasVivoMortoBtn.Location = new Point(12, 48);
             coordenacaoPericiasVivoMortoBtn.Name = "coordenacaoPericiasVivoMortoBtn";
             coordenacaoPericiasVivoMortoBtn.Size = new Size(387, 32);
@@ -45,7 +51,6 @@
             coordenacaoPericiasVivoMortoBtn.Text = "Coordenação de Perícias no Vivo e no Morto";
             coordenacaoPericiasVivoMortoBtn.UseVisualStyleBackColor = true;
             coordenacaoPericiasVivoMortoBtn.Click += coordenacaoPericiasVivoMortoBtn_Click;
-            coordenacaoPericiasVivoMortoBtn.Enabled = false;
             // 
             // coordenadoriaPsiquiatriaForenseBtn
             // 
@@ -89,18 +94,73 @@
             // coordenacaoPericiasVivoLaudosBtn
             // 
             coordenacaoPericiasVivoLaudosBtn.Location = new Point(12, 194);
-            coordenacaoPericiasVivoLaudosBtn.Name = "button1";
+            coordenacaoPericiasVivoLaudosBtn.Name = "coordenacaoPericiasVivoLaudosBtn";
             coordenacaoPericiasVivoLaudosBtn.Size = new Size(387, 32);
             coordenacaoPericiasVivoLaudosBtn.TabIndex = 5;
             coordenacaoPericiasVivoLaudosBtn.Text = "Coordenação de Perícias no Vivo (CPV) Laudos";
             coordenacaoPericiasVivoLaudosBtn.UseVisualStyleBackColor = true;
             coordenacaoPericiasVivoLaudosBtn.Click += coordenacaoPericiasVivoLaudosBtn_Click;
             // 
+            // pcepaCastanhalICGeralBtn
+            // 
+            pcepaCastanhalICGeralBtn.Location = new Point(12, 232);
+            pcepaCastanhalICGeralBtn.Name = "pcepaCastanhalICGeralBtn";
+            pcepaCastanhalICGeralBtn.Size = new Size(387, 32);
+            pcepaCastanhalICGeralBtn.TabIndex = 6;
+            pcepaCastanhalICGeralBtn.Text = "PCEPA Castanhal - IC Geral";
+            pcepaCastanhalICGeralBtn.UseVisualStyleBackColor = true;
+            pcepaCastanhalICGeralBtn.Click += pcepaCastanhalICGeralBtn_Click;
+            // 
+            // pcepaCastanhalICLaboratorioBtn
+            // 
+            pcepaCastanhalICLaboratorioBtn.Location = new Point(12, 270);
+            pcepaCastanhalICLaboratorioBtn.Name = "pcepaCastanhalICLaboratorioBtn";
+            pcepaCastanhalICLaboratorioBtn.Size = new Size(387, 32);
+            pcepaCastanhalICLaboratorioBtn.TabIndex = 7;
+            pcepaCastanhalICLaboratorioBtn.Text = "PCEPA Castanhal (IC) Laboratório";
+            pcepaCastanhalICLaboratorioBtn.UseVisualStyleBackColor = true;
+            pcepaCastanhalICLaboratorioBtn.Click += pcepaCastanhalICLaboratorioBtn_Click;
+            // 
+            // pcepaCastanhalIMOLDigitalizacoesBtn
+            // 
+            pcepaCastanhalIMOLDigitalizacoesBtn.Location = new Point(12, 308);
+            pcepaCastanhalIMOLDigitalizacoesBtn.Name = "pcepaCastanhalIMOLDigitalizacoesBtn";
+            pcepaCastanhalIMOLDigitalizacoesBtn.Size = new Size(387, 32);
+            pcepaCastanhalIMOLDigitalizacoesBtn.TabIndex = 8;
+            pcepaCastanhalIMOLDigitalizacoesBtn.Text = "PCEPA Castanhal (IMOL) Digitalizações";
+            pcepaCastanhalIMOLDigitalizacoesBtn.UseVisualStyleBackColor = true;
+            pcepaCastanhalIMOLDigitalizacoesBtn.Click += pcepaCastanhalIMOLDigitalizacoesBtn_Click;
+            // 
+            // pcepaCastanhalIMOLDraRosaBarrosBtn
+            // 
+            pcepaCastanhalIMOLDraRosaBarrosBtn.Location = new Point(12, 346);
+            pcepaCastanhalIMOLDraRosaBarrosBtn.Name = "pcepaCastanhalIMOLDraRosaBarrosBtn";
+            pcepaCastanhalIMOLDraRosaBarrosBtn.Size = new Size(387, 32);
+            pcepaCastanhalIMOLDraRosaBarrosBtn.TabIndex = 9;
+            pcepaCastanhalIMOLDraRosaBarrosBtn.Text = "PCEPA Castanhal (IMOL) Drª Rosa Barros";
+            pcepaCastanhalIMOLDraRosaBarrosBtn.UseVisualStyleBackColor = true;
+            pcepaCastanhalIMOLDraRosaBarrosBtn.Click += pcepaCastanhalIMOLDraRosaBarrosBtn_Click;
+            // 
+            // pcepaCastanhalIMOLLaudosMedicinaBtn
+            // 
+            pcepaCastanhalIMOLLaudosMedicinaBtn.Location = new Point(12, 384);
+            pcepaCastanhalIMOLLaudosMedicinaBtn.Name = "pcepaCastanhalIMOLLaudosMedicinaBtn";
+            pcepaCastanhalIMOLLaudosMedicinaBtn.Size = new Size(387, 32);
+            pcepaCastanhalIMOLLaudosMedicinaBtn.TabIndex = 10;
+            pcepaCastanhalIMOLLaudosMedicinaBtn.Text = "PCEPA Castanhal (IMOL) Laudos Medicina";
+            pcepaCastanhalIMOLLaudosMedicinaBtn.UseVisualStyleBackColor = true;
+            pcepaCastanhalIMOLLaudosMedicinaBtn.Click += pcepaCastanhalIMOLLaudosMedicinaBtn_Click;
+            // 
             // ImportadorDeLaudosForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(603, 329);
+            ClientSize = new Size(603, 440);
+            Controls.Add(pcepaCastanhalIMOLLaudosMedicinaBtn);
+            Controls.Add(pcepaCastanhalIMOLDraRosaBarrosBtn);
+            Controls.Add(pcepaCastanhalIMOLDigitalizacoesBtn);
+            Controls.Add(pcepaCastanhalICLaboratorioBtn);
+            Controls.Add(pcepaCastanhalICGeralBtn);
             Controls.Add(coordenacaoPericiasVivoLaudosBtn);
             Controls.Add(coordenacaoPericiasMortoLaudosBtn);
             Controls.Add(coordenadoriaDeAdministracaoServidoresBtn);
@@ -121,5 +181,10 @@
         private Button coordenadoriaDeAdministracaoServidoresBtn;
         private Button coordenacaoPericiasMortoLaudosBtn;
         private Button coordenacaoPericiasVivoLaudosBtn;
+        private Button pcepaCastanhalICGeralBtn;
+        private Button pcepaCastanhalICLaboratorioBtn;
+        private Button pcepaCastanhalIMOLDigitalizacoesBtn;
+        private Button pcepaCastanhalIMOLDraRosaBarrosBtn;
+        private Button pcepaCastanhalIMOLLaudosMedicinaBtn;
     }
 }

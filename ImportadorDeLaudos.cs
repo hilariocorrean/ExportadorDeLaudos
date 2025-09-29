@@ -51,5 +51,35 @@ namespace ImportadorDeLaudos
             var window = new CoordenacaoDePericiasNoVivoLaudosForm(_configuration, _httpClient);
             window.ShowDialog();
         }
+
+        private void pcepaCastanhalICGeralBtn_Click(object sender, EventArgs e)
+        {
+            var window = new PCEPACastanhalICGeralForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
+
+        private void pcepaCastanhalICLaboratorioBtn_Click(object sender, EventArgs e)
+        {
+            var window = new PCEPACastanhalICLaboratorioForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
+
+        private void pcepaCastanhalIMOLDigitalizacoesBtn_Click(object sender, EventArgs e)
+        {
+            var window = new PCEPACastanhalIMOLDigitalizacoesForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
+
+        private void pcepaCastanhalIMOLDraRosaBarrosBtn_Click(object sender, EventArgs e)
+        {
+            var window = new PCEPACastanhalIMOLDraRosaBarrosForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
+
+        private void pcepaCastanhalIMOLLaudosMedicinaBtn_Click(object sender, EventArgs e)
+        {
+            var window = new PCEPACastanhalIMOLLaudosMedicinaForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
     }
 }
