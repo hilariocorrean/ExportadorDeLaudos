@@ -120,7 +120,7 @@ namespace ImportadorDeLaudos
             try
             {
                 string reportType = comboReportType.SelectedItem!.ToString()!;
-                double? yearAsNullableDouble = (double)year.Value;
+                double? yearAsNullableDouble = noYear.Checked ? null : (double)year.Value;
                 var maxFilesAsDouble = (double)maxFiles.Value;
 
                 // Uma chamada para cada arquivo na lista. O ano é constante, o número máximo de arquivos é constante mas o número de
@@ -225,6 +225,11 @@ namespace ImportadorDeLaudos
         {
             // Libera o botão de envio se houver ao menos um arquivo na lista e se tiver um tipo definido de laudo
             buttonSendToOrbis.Enabled = listFilePaths.Items.Count > 0 && comboReportType.SelectedIndex != -1; //mudar o segundo pra 'is not null'?
+        }
+
+        private void NoYear_CheckedChanged(object sender, EventArgs e)
+        {
+            year.Enabled = !noYear.Checked;
         }
     }
 }

@@ -21,6 +21,7 @@ namespace ImportadorDeLaudos
         private Label labelMaxFiles;
         private FolderBrowserDialog folderBrowserDialog;
         private OpenFileDialog openFileDialog;
+        private CheckBox noYear;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -54,6 +55,7 @@ namespace ImportadorDeLaudos
             labelReportType = new Label();
             labelYear = new Label();
             labelMaxFiles = new Label();
+            noYear = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)year).BeginInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).BeginInit();
             SuspendLayout();
@@ -142,11 +144,23 @@ namespace ImportadorDeLaudos
             labelMaxFiles.TabIndex = 8;
             labelMaxFiles.Text = "Nº máximo de arquivos";
             // 
+            // noYear
+            // 
+            noYear.AutoSize = true;
+            noYear.Location = new Point(553, 429);
+            noYear.Name = "useYear";
+            noYear.Size = new Size(101, 24);
+            noYear.TabIndex = 9;
+            noYear.Text = "Sem ano";
+            noYear.UseVisualStyleBackColor = true;
+            noYear.CheckedChanged += NoYear_CheckedChanged;
+            // 
             // PCEPACastanhalIMOLLaudosMedicinaForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1083, 542);
+            Controls.Add(noYear);
             Controls.Add(labelMaxFiles);
             Controls.Add(labelYear);
             Controls.Add(labelReportType);

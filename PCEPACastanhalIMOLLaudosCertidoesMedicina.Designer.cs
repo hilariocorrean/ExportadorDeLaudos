@@ -21,6 +21,7 @@ namespace ImportadorDeLaudos
         private Label labelMaxFiles;
         private FolderBrowserDialog folderBrowserDialog;
         private OpenFileDialog openFileDialog;
+        private CheckBox noYear;
 
         /// <summary>
         ///  Clean up any resources being used.
@@ -54,6 +55,7 @@ namespace ImportadorDeLaudos
             labelReportType = new Label();
             labelYear = new Label();
             labelMaxFiles = new Label();
+            noYear = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)year).BeginInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).BeginInit();
             SuspendLayout();
@@ -120,7 +122,7 @@ namespace ImportadorDeLaudos
             labelReportType.AutoSize = true;
             labelReportType.Location = new Point(15, 399);
             labelReportType.Name = "labelReportType";
-            labelReportType.Size = new Size(255, 20);
+            labelReportType.Size = new Size(257, 20);
             labelReportType.TabIndex = 6;
             labelReportType.Text = "Modalidade (IMOL) Laudos Certidões";
             // 
@@ -142,11 +144,23 @@ namespace ImportadorDeLaudos
             labelMaxFiles.TabIndex = 8;
             labelMaxFiles.Text = "Nº máximo de arquivos";
             // 
-            // PCEPACastanhalIMOLLaudosMedicinaForm
+            // noYear
+            // 
+            noYear.AutoSize = true;
+            noYear.Location = new Point(553, 429);
+            noYear.Name = "useYear";
+            noYear.Size = new Size(101, 24);
+            noYear.TabIndex = 9;
+            noYear.Text = "Sem ano";
+            noYear.UseVisualStyleBackColor = true;
+            noYear.CheckedChanged += NoYear_CheckedChanged;
+            // 
+            // PCEPACastanhalIMOLLaudosCertidoesMedicinaForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1083, 542);
+            Controls.Add(noYear);
             Controls.Add(labelMaxFiles);
             Controls.Add(labelYear);
             Controls.Add(labelReportType);
@@ -156,14 +170,14 @@ namespace ImportadorDeLaudos
             Controls.Add(year);
             Controls.Add(maxFiles);
             Controls.Add(buttonSendToOrbis);
-            Name = "PCEPACastanhalIMOLLaudosMedicinaForm";
+            Name = "PCEPACastanhalIMOLLaudosCertidoesMedicinaForm";
             Text = "Importador de Laudos - PCEPA Castanhal (IMOL) Laudos Certidões Medicina";
             ((System.ComponentModel.ISupportInitialize)year).EndInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).EndInit();
             ResumeLayout(false);
             PerformLayout();
-        }
+        }   
 
-        #endregion        
+        #endregion
     }
 }

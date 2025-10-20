@@ -21,7 +21,7 @@
     <Compile Update="CoordenacaoDePericiasNoMortoLaudos.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="PCEPACastanhalIMOLLaudosCertidoesMedicina .cs">
+    <Compile Update="PCEPACastanhalIMOLLaudosCertidoesMedicina.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="PCEPACastanhalIMOLLaudosMedicina.cs">
