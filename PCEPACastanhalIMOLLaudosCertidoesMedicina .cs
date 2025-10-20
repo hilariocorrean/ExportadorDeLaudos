@@ -10,14 +10,14 @@ using System.Text.RegularExpressions;
 
 namespace ImportadorDeLaudos
 {
-    public partial class PCEPACastanhalIMOLDraRosaBarrosForm : Form
+    public partial class PCEPACastanhalIMOLLaudosCertidoesMedicinaForm : Form
     {
         private readonly IConfigurationRoot _configuration;
         private readonly IOrbisRepository orbisRepository;
         private readonly string admUser;
         private readonly string admPass;
 
-        public PCEPACastanhalIMOLDraRosaBarrosForm(IConfigurationRoot configuration, HttpClient _httpClient)
+        public PCEPACastanhalIMOLLaudosCertidoesMedicinaForm(IConfigurationRoot configuration, HttpClient _httpClient)
         {
             _configuration = configuration;
             InitializeComponent();
@@ -52,33 +52,33 @@ namespace ImportadorDeLaudos
         // índices possíveis para o tipo documental em questão.
         // TODO: Adicionar à lista de argumentos a lista de keywords retornadas do GetKeywordsTypeOfsAsync, de modo que
         // KeywordTypeOf = Id e Value é associado a uma Label retornada.
-        private List<OrbisDocKeywordVersion> GetOrbisDocKeywordVersionsList(string modalidadeIMOLDraRosaBarros, string nome, double? ano)
+        private List<OrbisDocKeywordVersion> GetOrbisDocKeywordVersionsList(string modalidadeIMOLLaudosMedicina, string nome, double? ano)
         {
             var keywordVersionList = new List<OrbisDocKeywordVersion>();
 
-            var modalidadeIMOLDraRosaBarrosKeyword = new OrbisDocKeywordVersion
+            var modalidadeIMOLLaudosMedicinaKeyword = new OrbisDocKeywordVersion
             {
-                KeywordTypeOf = "01998159-f912-7fea-baf0-73f86afd6c6b",
+                KeywordTypeOf = "0199edd2-68bc-76d1-b6c7-fe314380b8a5",
                 Enable = 1,
                 Status = 1,
-                Value = modalidadeIMOLDraRosaBarros
+                Value = modalidadeIMOLLaudosMedicina
             };            
             var nomeKeyword = new OrbisDocKeywordVersion
             {
-                KeywordTypeOf = "01998159-f913-7b34-af73-b5a6ad39b65c",
+                KeywordTypeOf = "0199edd2-68bc-724c-a4e2-a2d793a6b048",
                 Enable = 1,
                 Status = 1,
                 Value = nome
             };
             var anoKeyword = new OrbisDocKeywordVersion
             {
-                KeywordTypeOf = "01998159-f913-72d6-8005-2ae639997b77",
+                KeywordTypeOf = "0199edd2-68bc-750b-98b5-f9212833d5d8",
                 Enable = 1,
                 Status = 1,
                 Value = ano is null ? String.Empty : ((int)ano!).ToString()
             };
 
-            keywordVersionList.Add(modalidadeIMOLDraRosaBarrosKeyword);
+            keywordVersionList.Add(modalidadeIMOLLaudosMedicinaKeyword);
             keywordVersionList.Add(nomeKeyword);
             keywordVersionList.Add(anoKeyword);
 
@@ -139,8 +139,8 @@ namespace ImportadorDeLaudos
                         string docName = Path.GetFileNameWithoutExtension(filePath);                               
 
                         var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
-                        // Tipo documental: PCEPA CASTANHAL (IMOL) DRª ROSA BARROS
-                        var typeOf = "01998156-0bba-7ae4-b9bb-4dcbb5fd4c9e";
+                        // Tipo documental: PCEPA CASTANHAL (IMOL) LAUDOS CERTIDÕES MEDICINA
+                        var typeOf = "00199edcf-5615-7fc7-b84c-3f533884f39e";
                         //var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
 
                         // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)

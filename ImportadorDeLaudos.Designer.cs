@@ -39,6 +39,7 @@
             pcepaCastanhalIMOLDigitalizacoesBtn = new Button();
             pcepaCastanhalIMOLDraRosaBarrosBtn = new Button();
             pcepaCastanhalIMOLLaudosMedicinaBtn = new Button();
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn = new Button();
             SuspendLayout();
             // 
             // coordenacaoPericiasVivoMortoBtn
@@ -151,11 +152,22 @@
             pcepaCastanhalIMOLLaudosMedicinaBtn.UseVisualStyleBackColor = true;
             pcepaCastanhalIMOLLaudosMedicinaBtn.Click += pcepaCastanhalIMOLLaudosMedicinaBtn_Click;
             // 
+            // pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn
+            // 
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Location = new Point(9, 422);
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Name = "pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn";
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Size = new Size(387, 32);
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.TabIndex = 11;
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Text = "PCEPA Castanhal (IMOL) Laudos Certidões Medicina";
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.UseVisualStyleBackColor = true;
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Click += pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn_Click;
+            // 
             // ImportadorDeLaudosForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(603, 440);
+            ClientSize = new Size(408, 507);
+            Controls.Add(pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn);
             Controls.Add(pcepaCastanhalIMOLLaudosMedicinaBtn);
             Controls.Add(pcepaCastanhalIMOLDraRosaBarrosBtn);
             Controls.Add(pcepaCastanhalIMOLDigitalizacoesBtn);
@@ -186,5 +198,6 @@
         private Button pcepaCastanhalIMOLDigitalizacoesBtn;
         private Button pcepaCastanhalIMOLDraRosaBarrosBtn;
         private Button pcepaCastanhalIMOLLaudosMedicinaBtn;
+        private Button pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn;
     }
 }

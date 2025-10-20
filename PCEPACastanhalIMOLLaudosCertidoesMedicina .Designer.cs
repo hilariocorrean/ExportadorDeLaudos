@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace ImportadorDeLaudos
 {
-    partial class PCEPACastanhalIMOLLaudosMedicinaForm
+    partial class PCEPACastanhalIMOLLaudosCertidoesMedicinaForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -78,7 +78,7 @@ namespace ImportadorDeLaudos
             // 
             // comboReportType
             // 
-            comboReportType.Items.AddRange(new object[] { "SEXOLOGIA", "TRAUMATOLOGIA", "TANATOLOGIA" });
+            comboReportType.Items.AddRange(new object[] { "SEXOLOGIA", "TANATOLOGIA", "TRAUMATOLOGIA" });
             comboReportType.Location = new Point(272, 396);
             comboReportType.Name = "comboReportType";
             comboReportType.Size = new Size(276, 28);
@@ -122,7 +122,7 @@ namespace ImportadorDeLaudos
             labelReportType.Name = "labelReportType";
             labelReportType.Size = new Size(255, 20);
             labelReportType.TabIndex = 6;
-            labelReportType.Text = "Modalidade (IMOL) Laudos Medicina";
+            labelReportType.Text = "Modalidade (IMOL) Laudos Certidões";
             // 
             // labelYear
             // 
@@ -157,7 +157,7 @@ namespace ImportadorDeLaudos
             Controls.Add(maxFiles);
             Controls.Add(buttonSendToOrbis);
             Name = "PCEPACastanhalIMOLLaudosMedicinaForm";
-            Text = "Importador de Laudos - PCEPA Castanhal (IMOL) Laudos Medicina";
+            Text = "Importador de Laudos - PCEPA Castanhal (IMOL) Laudos Certidões Medicina";
             ((System.ComponentModel.ISupportInitialize)year).EndInit();
             ((System.ComponentModel.ISupportInitialize)maxFiles).EndInit();
             ResumeLayout(false);

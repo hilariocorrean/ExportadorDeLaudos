@@ -65,14 +65,14 @@ namespace ImportadorDeLaudos
             };            
             var nomeKeyword = new OrbisDocKeywordVersion
             {
-                KeywordTypeOf = "01998165-54e6-734e-b29d-4e54c4328a36",
+                KeywordTypeOf = "01998165-54e6-70ee-9075-8ed2477ad072",
                 Enable = 1,
                 Status = 1,
                 Value = nome
             };
             var anoKeyword = new OrbisDocKeywordVersion
             {
-                KeywordTypeOf = "01998165-54e6-70ee-9075-8ed2477ad072",
+                KeywordTypeOf = "01998165-54e6-734e-b29d-4e54c4328a36",
                 Enable = 1,
                 Status = 1,
                 Value = ano is null ? String.Empty : ((int)ano!).ToString()
