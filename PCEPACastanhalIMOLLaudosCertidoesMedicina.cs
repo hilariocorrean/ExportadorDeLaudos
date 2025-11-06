@@ -140,7 +140,7 @@ namespace ImportadorDeLaudos
 
                         var token = await orbisRepository.GetLoginTokenAsync(admUser, admPass);
                         // Tipo documental: PCEPA CASTANHAL (IMOL) LAUDOS CERTIDÕES MEDICINA
-                        var typeOf = "00199edcf-5615-7fc7-b84c-3f533884f39e";
+                        var typeOf = "0199edcf-5615-7fc7-b84c-3f533884f39e";
                         //var testeKeywordsTypeOf = await orbisRepository.GetKeywordsTypeOfAsync(typeOf, token);
 
                         // Preparo dos objetos aninhados (doc keyword version, doc version e doc properties)
