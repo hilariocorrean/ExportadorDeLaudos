@@ -80,7 +80,7 @@ namespace ImportadorDeLaudos
             // 
             // comboReportType
             // 
-            comboReportType.Items.AddRange(new object[] { "AUTO DE ENTREGA", "CONTATAÇÃO WORD", "DNA", "LIVRO E.F.Q.B.", "LIVRO INSTRUMENTAL", "LIVRO TOXICOLÓGICO", "LIVROS" });
+            comboReportType.Items.AddRange(new object[] { "AUTO DE ENTREGA", "CONSTATAÇÃO WORD", "DNA", "LIVRO E.F.Q.B.", "LIVRO INSTRUMENTAL", "LIVRO TOXICOLÓGICO", "LIVROS", "PERÍCIA.NET", "REQUISIÇÕES RECUSADAS", "TERMO DE RECUSA" });
             comboReportType.Location = new Point(220, 396);
             comboReportType.Name = "comboReportType";
             comboReportType.Size = new Size(276, 28);
