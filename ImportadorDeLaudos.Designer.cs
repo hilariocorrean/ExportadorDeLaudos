@@ -39,6 +39,7 @@
             pcepaCastanhalIMOLDigitalizacoesBtn = new Button();
             pcepaCastanhalIMOLDraRosaBarrosBtn = new Button();
             pcepaCastanhalIMOLLaudosMedicinaBtn = new Button();
+            pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn = new Button();
             pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn = new Button();
             SuspendLayout();
             // 
@@ -152,12 +153,22 @@
             pcepaCastanhalIMOLLaudosMedicinaBtn.UseVisualStyleBackColor = true;
             pcepaCastanhalIMOLLaudosMedicinaBtn.Click += pcepaCastanhalIMOLLaudosMedicinaBtn_Click;
             // 
+            // pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn
+            // 
+            pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn.Location = new Point(12, 422);
+            pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn.Name = "pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn";
+            pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn.Size = new Size(387, 32);
+            pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn.TabIndex = 11;
+            pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn.Text = "PCEPA Castanhal (IMOL) Laudos Medicina - PC Madson";
+            pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn.UseVisualStyleBackColor = true;
+            pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn.Click += pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn_Click;
+            // 
             // pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn
             // 
-            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Location = new Point(9, 422);
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Location = new Point(9, 460);
             pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Name = "pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn";
             pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Size = new Size(387, 32);
-            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.TabIndex = 11;
+            pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.TabIndex = 12;
             pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Text = "PCEPA Castanhal (IMOL) Laudos Certidões Medicina";
             pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.UseVisualStyleBackColor = true;
             pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn.Click += pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn_Click;
@@ -166,8 +177,9 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(408, 507);
+            ClientSize = new Size(408, 561);
             Controls.Add(pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn);
+            Controls.Add(pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn);
             Controls.Add(pcepaCastanhalIMOLLaudosMedicinaBtn);
             Controls.Add(pcepaCastanhalIMOLDraRosaBarrosBtn);
             Controls.Add(pcepaCastanhalIMOLDigitalizacoesBtn);
@@ -198,6 +210,7 @@
         private Button pcepaCastanhalIMOLDigitalizacoesBtn;
         private Button pcepaCastanhalIMOLDraRosaBarrosBtn;
         private Button pcepaCastanhalIMOLLaudosMedicinaBtn;
+        private Button pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn;
         private Button pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn;
     }
 }

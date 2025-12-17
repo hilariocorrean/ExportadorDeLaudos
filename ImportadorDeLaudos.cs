@@ -82,6 +82,12 @@ namespace ImportadorDeLaudos
             window.ShowDialog();
         }
 
+        private void pcepaCastanhalIMOLLaudosMedicinaPcMadsonBtn_Click(object sender, EventArgs e)
+        {
+            var window = new PCEPACastanhalIMOLLaudosMedicinaPcMadsonForm(_configuration, _httpClient);
+            window.ShowDialog();
+        }
+
         private void pcepaCastanhalIMOLLaudosCertidoesMedicinaBtn_Click(object sender, EventArgs e)
         {
             var window = new PCEPACastanhalIMOLLaudosCertidoesMedicinaForm(_configuration, _httpClient);
